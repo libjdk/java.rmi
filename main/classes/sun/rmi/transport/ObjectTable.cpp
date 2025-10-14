@@ -225,7 +225,7 @@ bool ObjectTable::unexportObject($Remote* obj, bool force) {
 		$var($Target, target, getTarget(obj));
 		if (target == nullptr) {
 			$throwNew($NoSuchObjectException, "object not exported"_s);
-		} else if (target->unexport(force)) {
+		} else if ($nc(target)->unexport(force)) {
 			removeTarget(target);
 			return true;
 		} else {

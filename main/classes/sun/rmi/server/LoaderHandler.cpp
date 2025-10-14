@@ -761,7 +761,7 @@ void LoaderHandler::addPermissionsForURLs($URLArray* urls, $PermissionCollection
 							perms->add(p2);
 						}
 						$nc(perms)->add($$new($FilePermission, path, "read"_s));
-					} else if (!perms->implies(p)) {
+					} else if (!$nc(perms)->implies(p)) {
 						perms->add(p);
 					}
 				} else {

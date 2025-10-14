@@ -337,7 +337,7 @@ void Target::referenced(int64_t sequenceNum, $VMID* vmid) {
 		$var($SequenceEntry, entry, $cast($SequenceEntry, $nc(this->sequenceTable)->get(vmid)));
 		if (entry == nullptr) {
 			$nc(this->sequenceTable)->put(vmid, $$new($SequenceEntry, sequenceNum));
-		} else if (entry->sequenceNum < sequenceNum) {
+		} else if ($nc(entry)->sequenceNum < sequenceNum) {
 			entry->update(sequenceNum);
 		} else {
 			return;
