@@ -1,0 +1,3 @@
+java.rmi:17.35
+java.base:17.35
+java.logging:17.35
