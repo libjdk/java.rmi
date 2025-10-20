@@ -128,6 +128,7 @@ void UnicastRemoteObject::readObject($ObjectInputStream* in) {
 }
 
 $Object* UnicastRemoteObject::clone() {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var(UnicastRemoteObject, cloned, $cast(UnicastRemoteObject, $RemoteServer::clone()));
 		$nc(cloned)->reexport();
@@ -164,6 +165,7 @@ $Remote* UnicastRemoteObject::exportObject($Remote* obj, int32_t port, $RMIClien
 
 $Remote* UnicastRemoteObject::exportObject($Remote* obj, int32_t port, $ObjectInputFilter* filter) {
 	$init(UnicastRemoteObject);
+	$useLocalCurrentObjectStackCache();
 	return exportObject(obj, $$new($UnicastServerRef, $$new($LiveRef, port), filter));
 }
 

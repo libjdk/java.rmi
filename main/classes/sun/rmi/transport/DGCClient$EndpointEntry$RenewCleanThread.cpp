@@ -162,6 +162,7 @@ void DGCClient$EndpointEntry$RenewCleanThread::init$($DGCClient$EndpointEntry* t
 }
 
 void DGCClient$EndpointEntry$RenewCleanThread::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	do {
 		int64_t timeToWait = 0;

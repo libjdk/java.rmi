@@ -70,6 +70,7 @@ void ObjectTable$Reaper::init$() {
 }
 
 void ObjectTable$Reaper::run() {
+	$useLocalCurrentObjectStackCache();
 	try {
 		do {
 			$init($ObjectTable);

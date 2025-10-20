@@ -160,6 +160,7 @@ bool TCPConnection::expired(int64_t time) {
 }
 
 bool TCPConnection::isDead() {
+	$useLocalCurrentObjectStackCache();
 	$var($InputStream, i, nullptr);
 	$var($OutputStream, o, nullptr);
 	int64_t start = $System::currentTimeMillis();

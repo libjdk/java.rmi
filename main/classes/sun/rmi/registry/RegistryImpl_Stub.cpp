@@ -129,6 +129,7 @@ void RegistryImpl_Stub::init$($RemoteRef* ref) {
 }
 
 void RegistryImpl_Stub::bind($String* $param_String_1, $Remote* $param_Remote_2) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(this, RegistryImpl_Stub::operations, 0, RegistryImpl_Stub::interfaceHash)));
 		try {
@@ -157,6 +158,7 @@ void RegistryImpl_Stub::bind($String* $param_String_1, $Remote* $param_Remote_2)
 }
 
 $StringArray* RegistryImpl_Stub::list() {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(this, RegistryImpl_Stub::operations, 1, RegistryImpl_Stub::interfaceHash)));
 		$nc(this->ref)->invoke(call);
@@ -204,6 +206,7 @@ $StringArray* RegistryImpl_Stub::list() {
 }
 
 $Remote* RegistryImpl_Stub::lookup($String* $param_String_1) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(this, RegistryImpl_Stub::operations, 2, RegistryImpl_Stub::interfaceHash)));
 		try {
@@ -261,6 +264,7 @@ $Remote* RegistryImpl_Stub::lookup($String* $param_String_1) {
 }
 
 void RegistryImpl_Stub::rebind($String* $param_String_1, $Remote* $param_Remote_2) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(this, RegistryImpl_Stub::operations, 3, RegistryImpl_Stub::interfaceHash)));
 		try {
@@ -286,6 +290,7 @@ void RegistryImpl_Stub::rebind($String* $param_String_1, $Remote* $param_Remote_
 }
 
 void RegistryImpl_Stub::unbind($String* $param_String_1) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(this, RegistryImpl_Stub::operations, 4, RegistryImpl_Stub::interfaceHash)));
 		try {
@@ -313,6 +318,7 @@ void RegistryImpl_Stub::unbind($String* $param_String_1) {
 }
 
 void clinit$RegistryImpl_Stub($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(RegistryImpl_Stub::operations, $new($OperationArray, {
 		$$new($Operation, "void bind(java.lang.String, java.rmi.Remote)"_s),
 		$$new($Operation, "java.lang.String list()[]"_s),

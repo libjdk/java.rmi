@@ -125,6 +125,7 @@ void TCPTransport$AcceptLoop::init$($TCPTransport* this$0, $ServerSocket* server
 }
 
 void TCPTransport$AcceptLoop::run() {
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($Throwable, var$0, nullptr);
 		try {
@@ -155,6 +156,7 @@ void TCPTransport$AcceptLoop::run() {
 }
 
 void TCPTransport$AcceptLoop::executeAcceptLoop() {
+	$useLocalCurrentObjectStackCache();
 	$init($TCPTransport);
 	$init($Log);
 	if ($nc($TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
@@ -227,6 +229,7 @@ void TCPTransport$AcceptLoop::executeAcceptLoop() {
 }
 
 bool TCPTransport$AcceptLoop::continueAfterAcceptFailure($Throwable* t) {
+	$useLocalCurrentObjectStackCache();
 	$var($RMIFailureHandler, fh, $RMISocketFactory::getFailureHandler());
 	if (fh != nullptr) {
 		return fh->failure($instanceOf($Exception, t) ? $cast($Exception, t) : static_cast<$Exception*>($$new($InvocationTargetException, t)));

@@ -209,6 +209,7 @@ $LiveRef* UnicastRef::getLiveRef() {
 }
 
 $Object* UnicastRef::invoke($Remote* obj, $Method* method, $ObjectArray* params, int64_t opnum) {
+	$useLocalCurrentObjectStackCache();
 	$init($Log);
 	if ($nc(UnicastRef::clientRefLog)->isLoggable($Log::VERBOSE)) {
 		$nc(UnicastRef::clientRefLog)->log($Log::VERBOSE, $$str({"method: "_s, method}));
@@ -383,6 +384,7 @@ void UnicastRef::marshalValue($Class* type, Object$* value, $ObjectOutput* out) 
 
 $Object* UnicastRef::unmarshalValue($Class* type, $ObjectInput* in) {
 	$init(UnicastRef);
+	$useLocalCurrentObjectStackCache();
 	if ($nc(type)->isPrimitive()) {
 		$init($Integer);
 		if (type == $Integer::TYPE) {
@@ -436,6 +438,7 @@ $Object* UnicastRef::unmarshalValue($Class* type, $ObjectInput* in) {
 }
 
 $RemoteCall* UnicastRef::newCall($RemoteObject* obj, $OperationArray* ops, int32_t opnum, int64_t hash) {
+	$useLocalCurrentObjectStackCache();
 	$init($Log);
 	$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "get connection"_s);
 	$var($Connection, conn, $nc($($nc(this->ref)->getChannel()))->newConnection());
@@ -461,6 +464,7 @@ $RemoteCall* UnicastRef::newCall($RemoteObject* obj, $OperationArray* ops, int32
 }
 
 void UnicastRef::invoke($RemoteCall* call) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::VERBOSE, "execute call"_s);
@@ -493,6 +497,7 @@ void UnicastRef::invoke($RemoteCall* call) {
 }
 
 void UnicastRef::free($RemoteCall* call, bool reuse) {
+	$useLocalCurrentObjectStackCache();
 	$var($Connection, conn, $nc(($cast($StreamRemoteCall, call)))->getConnection());
 	$nc($($nc(this->ref)->getChannel()))->free(conn, reuse);
 }
@@ -509,6 +514,7 @@ void UnicastRef::done($RemoteCall* call) {
 }
 
 void UnicastRef::logClientCall(Object$* obj, Object$* method) {
+	$useLocalCurrentObjectStackCache();
 	$init($Log);
 	$var($String, var$3, $$str({"outbound call: "_s, this->ref, " : "_s}));
 	$var($String, var$2, $$concat(var$3, $($nc($of(obj))->getClass()->getName())));
@@ -550,6 +556,7 @@ $Boolean* UnicastRef::lambda$static$0() {
 }
 
 void clinit$UnicastRef($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($Util);
 	$assignStatic(UnicastRef::clientRefLog, $Log::getLog("sun.rmi.client.ref"_s, "transport"_s, $Util::logLevel));

@@ -98,6 +98,7 @@ $String* LoaderHandler$Loader::getClassAnnotation() {
 }
 
 void LoaderHandler$Loader::checkPermissions() {
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm != nullptr) {
 		$var($Enumeration, enum_, $nc(this->permissions)->elements());

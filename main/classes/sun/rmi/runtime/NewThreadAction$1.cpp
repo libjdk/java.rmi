@@ -64,6 +64,7 @@ void NewThreadAction$1::init$() {
 }
 
 $Object* NewThreadAction$1::run() {
+	$useLocalCurrentObjectStackCache();
 	$var($ThreadGroup, group, $($Thread::currentThread())->getThreadGroup());
 	$var($ThreadGroup, parent, nullptr);
 	while (($assign(parent, $nc(group)->getParent())) != nullptr) {

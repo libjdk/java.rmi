@@ -111,6 +111,7 @@ void NewThreadAction::init$($Runnable* runnable, $String* name, bool daemon, boo
 }
 
 $Object* NewThreadAction::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm != nullptr) {
@@ -124,6 +125,7 @@ $Object* NewThreadAction::run() {
 }
 
 void clinit$NewThreadAction($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$assignStatic(NewThreadAction::systemThreadGroup, $cast($ThreadGroup, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction$1)))));
 	$assignStatic(NewThreadAction::userThreadGroup, $cast($ThreadGroup, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction$2)))));

@@ -94,6 +94,7 @@ bool Log$LogStreamLog::isLoggable($Level* level) {
 }
 
 void Log$LogStreamLog::log($Level* messageLevel, $String* message) {
+	$useLocalCurrentObjectStackCache();
 	if (isLoggable(messageLevel)) {
 		$var($StackWalker$StackFrame, sourceFrame, $Log::getSource());
 		$var($String, var$2, $$str({$(unqualifiedName($($nc(sourceFrame)->getClassName()))), "."_s}));
@@ -104,6 +105,7 @@ void Log$LogStreamLog::log($Level* messageLevel, $String* message) {
 }
 
 void Log$LogStreamLog::log($Level* level, $String* message, $Throwable* thrown) {
+	$useLocalCurrentObjectStackCache();
 	if (isLoggable(level)) {
 		$synchronized(this->stream) {
 			$var($StackWalker$StackFrame, sourceFrame, $Log::getSource());

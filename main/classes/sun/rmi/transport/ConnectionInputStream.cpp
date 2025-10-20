@@ -119,6 +119,7 @@ void ConnectionInputStream::readID() {
 }
 
 void ConnectionInputStream::saveRef($LiveRef* ref) {
+	$useLocalCurrentObjectStackCache();
 	$var($Endpoint, ep, $nc(ref)->getEndpoint());
 	$var($List, refList, $cast($List, $nc(this->incomingRefTable)->get(ep)));
 	if (refList == nullptr) {
@@ -133,6 +134,7 @@ void ConnectionInputStream::discardRefs() {
 }
 
 void ConnectionInputStream::registerRefs() {
+	$useLocalCurrentObjectStackCache();
 	if (!$nc(this->incomingRefTable)->isEmpty()) {
 		{
 			$var($Iterator, i$, $nc($($nc(this->incomingRefTable)->entrySet()))->iterator());
@@ -152,6 +154,7 @@ void ConnectionInputStream::setAckNeeded() {
 }
 
 void ConnectionInputStream::done($Connection* c) {
+	$useLocalCurrentObjectStackCache();
 	if (this->dgcAckNeeded) {
 		$var($Connection, conn, nullptr);
 		$var($Channel, ch, nullptr);

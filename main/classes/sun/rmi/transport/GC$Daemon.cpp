@@ -67,6 +67,7 @@ void GC$Daemon::init$() {
 }
 
 void GC$Daemon::run() {
+	$useLocalCurrentObjectStackCache();
 	for (;;) {
 		int64_t l = 0;
 		$init($GC);

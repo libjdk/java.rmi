@@ -79,6 +79,7 @@ void UnicastServerRef$HashToMethod_Maps::init$() {
 }
 
 $Object* UnicastServerRef$HashToMethod_Maps::computeValue($Class* remoteClass) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($Map, map, $new($HashMap));
 	{

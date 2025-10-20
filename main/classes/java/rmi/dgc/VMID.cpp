@@ -108,6 +108,7 @@ bool VMID::equals(Object$* obj) {
 }
 
 $String* VMID::toString() {
+	$useLocalCurrentObjectStackCache();
 	$var($StringBuilder, sb, $new($StringBuilder));
 	if (this->addr != nullptr) {
 		for (int32_t i = 0; i < $nc(this->addr)->length; ++i) {
@@ -121,6 +122,7 @@ $String* VMID::toString() {
 }
 
 void clinit$VMID($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($SecureRandom, secureRandom, $new($SecureRandom));
 		$var($bytes, bytes, $new($bytes, 8));

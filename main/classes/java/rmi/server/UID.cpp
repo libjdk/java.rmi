@@ -84,6 +84,7 @@ int64_t UID::lastTime = 0;
 int16_t UID::lastCount = 0;
 
 void UID::init$() {
+	$useLocalCurrentObjectStackCache();
 	$synchronized(UID::lock) {
 		if (!UID::hostUniqueSet) {
 			UID::hostUnique = ($$new($SecureRandom))->nextInt();
@@ -143,6 +144,7 @@ bool UID::equals(Object$* obj) {
 }
 
 $String* UID::toString() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, var$2, $$str({$($Integer::toString(this->unique, 16)), ":"_s}));
 	$var($String, var$1, $$concat(var$2, $($Long::toString(this->time, 16))));
 	$var($String, var$0, $$concat(var$1, ":"));

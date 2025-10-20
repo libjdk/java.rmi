@@ -91,6 +91,7 @@ void RuntimeUtil$1::init$($RuntimeUtil* this$0) {
 }
 
 $Thread* RuntimeUtil$1::newThread($Runnable* runnable) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	try {
 		return $cast($Thread, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction, runnable, $$str({"Scheduler("_s, $$str($nc(this->count)->getAndIncrement()), ")"_s}), true))));

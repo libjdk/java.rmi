@@ -92,6 +92,7 @@ void SslRMIClientSocketFactory::init$() {
 }
 
 $Socket* SslRMIClientSocketFactory::createSocket($String* host, int32_t port) {
+	$useLocalCurrentObjectStackCache();
 	$var($SocketFactory, sslSocketFactory, getDefaultClientSocketFactory());
 	$var($SSLSocket, sslSocket, $cast($SSLSocket, $nc(sslSocketFactory)->createSocket(host, port)));
 	$var($String, enabledCipherSuites, $System::getProperty("javax.rmi.ssl.client.enabledCipherSuites"_s));

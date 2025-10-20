@@ -64,6 +64,7 @@ void RemoteException::init$($String* s, $Throwable* cause) {
 }
 
 $String* RemoteException::getMessage() {
+	$useLocalCurrentObjectStackCache();
 	if (this->detail == nullptr) {
 		return $IOException::getMessage();
 	} else {

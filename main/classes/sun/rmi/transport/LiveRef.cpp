@@ -135,6 +135,7 @@ void LiveRef::init$($ObjID* objID, int32_t port, $RMIClientSocketFactory* csf, $
 }
 
 $Object* LiveRef::clone() {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var(LiveRef, newRef, $cast(LiveRef, $Cloneable::clone()));
 		return $of(newRef);
@@ -201,6 +202,7 @@ bool LiveRef::equals(Object$* obj) {
 }
 
 bool LiveRef::remoteEquals(Object$* obj) {
+	$useLocalCurrentObjectStackCache();
 	if (obj != nullptr && $instanceOf(LiveRef, obj)) {
 		$var(LiveRef, ref, $cast(LiveRef, obj));
 		$var($TCPEndpoint, thisEp, $cast($TCPEndpoint, this->ep));
@@ -230,6 +232,7 @@ bool LiveRef::remoteEquals(Object$* obj) {
 }
 
 void LiveRef::write($ObjectOutput* out, bool useNewFormat) {
+	$useLocalCurrentObjectStackCache();
 	bool isResultStream = false;
 	if ($instanceOf($ConnectionOutputStream, out)) {
 		$var($ConnectionOutputStream, stream, $cast($ConnectionOutputStream, out));
@@ -258,6 +261,7 @@ void LiveRef::write($ObjectOutput* out, bool useNewFormat) {
 
 LiveRef* LiveRef::read($ObjectInput* in, bool useNewFormat) {
 	$init(LiveRef);
+	$useLocalCurrentObjectStackCache();
 	$var($Endpoint, ep, nullptr);
 	$var($ObjID, id, nullptr);
 	if (useNewFormat) {

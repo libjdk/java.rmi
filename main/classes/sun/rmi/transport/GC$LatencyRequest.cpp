@@ -98,6 +98,7 @@ void GC$LatencyRequest::adjustLatencyIfNeeded() {
 }
 
 void GC$LatencyRequest::init$(int64_t ms) {
+	$useLocalCurrentObjectStackCache();
 	if (ms <= 0) {
 		$throwNew($IllegalArgumentException, $$str({"Non-positive latency: "_s, $$str(ms)}));
 	}
@@ -139,6 +140,7 @@ int32_t GC$LatencyRequest::compareTo(GC$LatencyRequest* r) {
 }
 
 $String* GC$LatencyRequest::toString() {
+	$useLocalCurrentObjectStackCache();
 	return ($str({$(GC$LatencyRequest::class$->getName()), "["_s, $$str(this->latency), ","_s, $$str(this->id), "]"_s}));
 }
 

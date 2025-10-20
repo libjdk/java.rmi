@@ -77,6 +77,7 @@ void LoaderHandler$2::init$() {
 }
 
 $Object* LoaderHandler$2::run() {
+	$useLocalCurrentObjectStackCache();
 	$var($CodeSource, codesource, $new($CodeSource, ($URL*)nullptr, ($CertificateArray*)nullptr));
 	$var($Policy, p, $Policy::getPolicy());
 	if (p != nullptr) {

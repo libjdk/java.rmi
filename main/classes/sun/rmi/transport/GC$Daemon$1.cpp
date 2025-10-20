@@ -86,6 +86,7 @@ void GC$Daemon$1::init$() {
 }
 
 $Object* GC$Daemon$1::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($Thread, t, $InnocuousThread::newSystemThread("RMI GC Daemon"_s, $$new($GC$Daemon)));
 	if (!GC$Daemon$1::$assertionsDisabled && !($nc(t)->getContextClassLoader() == nullptr)) {

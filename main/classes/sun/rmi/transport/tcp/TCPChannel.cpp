@@ -303,6 +303,7 @@ $Endpoint* TCPChannel::getEndpoint() {
 }
 
 void TCPChannel::checkConnectPermission() {
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, security, $System::getSecurityManager());
 	if (security == nullptr) {
 		return;
@@ -352,6 +353,7 @@ $Connection* TCPChannel::newConnection() {
 }
 
 $Connection* TCPChannel::createConnection() {
+	$useLocalCurrentObjectStackCache();
 	$var($Connection, conn, nullptr);
 	$init($TCPTransport);
 	$init($Log);
@@ -415,6 +417,7 @@ $Connection* TCPChannel::createConnection() {
 }
 
 void TCPChannel::free($Connection* conn, bool reuse) {
+	$useLocalCurrentObjectStackCache();
 	if (conn == nullptr) {
 		return;
 	}
@@ -447,6 +450,7 @@ void TCPChannel::free($Connection* conn, bool reuse) {
 }
 
 void TCPChannel::writeTransportHeader($DataOutputStream* out) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($DataOutputStream, dataOut, $new($DataOutputStream, out));
 		dataOut->writeInt($TransportConstants::Magic);
@@ -458,6 +462,7 @@ void TCPChannel::writeTransportHeader($DataOutputStream* out) {
 }
 
 void TCPChannel::shedCache() {
+	$useLocalCurrentObjectStackCache();
 	$var($ConnectionArray, conn, nullptr);
 	$synchronized(this->freeList) {
 		$assign(conn, $fcast($ConnectionArray, $nc(this->freeList)->toArray($$new($ConnectionArray, $nc(this->freeList)->size()))));
@@ -475,6 +480,7 @@ void TCPChannel::shedCache() {
 }
 
 void TCPChannel::freeCachedConnections() {
+	$useLocalCurrentObjectStackCache();
 	$synchronized(this->freeList) {
 		int32_t size = $nc(this->freeList)->size();
 		if (size > 0) {
@@ -518,6 +524,7 @@ $Long* TCPChannel::lambda$static$0() {
 }
 
 void clinit$TCPChannel($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	TCPChannel::idleTimeout = $nc(($cast($Long, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPChannel$$Lambda$lambda$static$0)))))))->longValue();
 	TCPChannel::handshakeTimeout = $nc(($cast($Integer, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPChannel$$Lambda$lambda$static$1$1)))))))->intValue();

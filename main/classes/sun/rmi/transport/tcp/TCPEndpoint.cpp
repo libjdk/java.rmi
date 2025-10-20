@@ -327,12 +327,14 @@ $Map* TCPEndpoint::localEndpoints = nullptr;
 
 int32_t TCPEndpoint::getInt($String* name, int32_t def) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	return $nc(($cast($Integer, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPEndpoint$$Lambda$lambda$getInt$0, name, def)))))))->intValue();
 }
 
 bool TCPEndpoint::getBoolean($String* name) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	return $nc(($cast($Boolean, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPEndpoint$$Lambda$lambda$getBoolean$1$1, name)))))))->booleanValue();
 }
@@ -367,6 +369,7 @@ TCPEndpoint* TCPEndpoint::getLocalEndpoint(int32_t port) {
 
 TCPEndpoint* TCPEndpoint::getLocalEndpoint(int32_t port, $RMIClientSocketFactory* csf, $RMIServerSocketFactory* ssf) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$var(TCPEndpoint, ep, nullptr);
 	$synchronized(TCPEndpoint::localEndpoints) {
 		$var(TCPEndpoint, endpointKey, $new(TCPEndpoint, nullptr, port, csf, ssf));
@@ -407,6 +410,7 @@ TCPEndpoint* TCPEndpoint::getLocalEndpoint(int32_t port, $RMIClientSocketFactory
 
 $String* TCPEndpoint::resampleLocalHost() {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$var($String, hostnameProperty, getHostnameProperty());
 	$synchronized(TCPEndpoint::localEndpoints) {
 		if (hostnameProperty != nullptr) {
@@ -429,6 +433,7 @@ $String* TCPEndpoint::resampleLocalHost() {
 
 void TCPEndpoint::setLocalHost($String* host) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$synchronized(TCPEndpoint::localEndpoints) {
 		if (!TCPEndpoint::localHostKnown) {
 			$assignStatic(TCPEndpoint::localHost, host);
@@ -463,6 +468,7 @@ void TCPEndpoint::setLocalHost($String* host) {
 
 void TCPEndpoint::setDefaultPort(int32_t port, $RMIClientSocketFactory* csf, $RMIServerSocketFactory* ssf) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$var(TCPEndpoint, endpointKey, $new(TCPEndpoint, nullptr, 0, csf, ssf));
 	$synchronized(TCPEndpoint::localEndpoints) {
 		$var($LinkedList, epList, $cast($LinkedList, $nc(TCPEndpoint::localEndpoints)->get(endpointKey)));
@@ -500,6 +506,7 @@ $Transport* TCPEndpoint::getOutboundTransport() {
 
 $Collection* TCPEndpoint::allKnownTransports() {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$var($Set, s, nullptr);
 	$synchronized(TCPEndpoint::localEndpoints) {
 		$assign(s, $new($HashSet, $nc(TCPEndpoint::localEndpoints)->size()));
@@ -519,6 +526,7 @@ $Collection* TCPEndpoint::allKnownTransports() {
 
 void TCPEndpoint::shedConnectionCaches() {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($Iterator, i$, $nc($(allKnownTransports()))->iterator());
 		for (; $nc(i$)->hasNext();) {
@@ -563,6 +571,7 @@ $RMIServerSocketFactory* TCPEndpoint::getServerSocketFactory() {
 }
 
 $String* TCPEndpoint::toString() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, var$1, $$str({"["_s, this->host, ":"_s, $$str(this->port), (this->ssf != nullptr ? $$str({","_s, this->ssf}) : ""_s)}));
 	$var($String, var$0, $$concat(var$1, (this->csf != nullptr ? $$str({","_s, this->csf}) : ""_s)));
 	return $concat(var$0, "]");
@@ -618,6 +627,7 @@ void TCPEndpoint::write($ObjectOutput* out) {
 
 TCPEndpoint* TCPEndpoint::read($ObjectInput* in) {
 	$init(TCPEndpoint);
+	$useLocalCurrentObjectStackCache();
 	$var($String, host, nullptr);
 	int32_t port = 0;
 	$var($RMIClientSocketFactory, csf, nullptr);
@@ -673,6 +683,7 @@ $RMISocketFactory* TCPEndpoint::chooseFactory() {
 }
 
 $Socket* TCPEndpoint::newSocket() {
+	$useLocalCurrentObjectStackCache();
 	$init($TCPTransport);
 	$init($Log);
 	if ($nc($TCPTransport::tcpLog)->isLoggable($Log::VERBOSE)) {
@@ -716,6 +727,7 @@ $Socket* TCPEndpoint::newSocket() {
 }
 
 $ServerSocket* TCPEndpoint::newServerSocket() {
+	$useLocalCurrentObjectStackCache();
 	$init($TCPTransport);
 	$init($Log);
 	if ($nc($TCPTransport::tcpLog)->isLoggable($Log::VERBOSE)) {
@@ -748,6 +760,7 @@ $Integer* TCPEndpoint::lambda$getInt$0($String* name, int32_t def) {
 }
 
 void clinit$TCPEndpoint($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	{
 		TCPEndpoint::localHostKnown = true;
 		$assignStatic(TCPEndpoint::localHost, TCPEndpoint::getHostnameProperty());

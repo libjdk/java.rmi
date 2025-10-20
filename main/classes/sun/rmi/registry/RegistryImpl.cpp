@@ -373,6 +373,7 @@ $ObjectInputFilter* RegistryImpl::registryFilter$ = nullptr;
 
 $ObjectInputFilter* RegistryImpl::initRegistryFilter() {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	$var($ObjectInputFilter, filter, nullptr);
 	$var($String, props, $System::getProperty(RegistryImpl::REGISTRY_FILTER_PROPNAME));
 	if (props == nullptr) {
@@ -393,6 +394,7 @@ void RegistryImpl::init$(int32_t port, $RMIClientSocketFactory* csf, $RMIServerS
 }
 
 void RegistryImpl::init$(int32_t port, $RMIClientSocketFactory* csf, $RMIServerSocketFactory* ssf, $ObjectInputFilter* serialFilter) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$RemoteServer::init$();
 	$set(this, bindings, $new($Hashtable, 101));
@@ -411,6 +413,7 @@ void RegistryImpl::init$(int32_t port, $RMIClientSocketFactory* csf, $RMIServerS
 }
 
 void RegistryImpl::init$(int32_t port) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$RemoteServer::init$();
 	$set(this, bindings, $new($Hashtable, 101));
@@ -468,6 +471,7 @@ void RegistryImpl::rebind($String* name, $Remote* obj) {
 }
 
 $StringArray* RegistryImpl::list() {
+	$useLocalCurrentObjectStackCache();
 	$var($StringArray, names, nullptr);
 	$synchronized(this->bindings) {
 		int32_t i = $nc(this->bindings)->size();
@@ -482,6 +486,7 @@ $StringArray* RegistryImpl::list() {
 
 void RegistryImpl::checkAccess($String* op) {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	try {
 		$var($String, clientHostName, getClientHost());
@@ -545,6 +550,7 @@ $String* RegistryImpl::getTextResource($String* key) {
 
 $URLArray* RegistryImpl::pathToURLs($String* path) {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	$var($List, paths, $new($ArrayList));
 	{
 		$init($File);
@@ -620,6 +626,7 @@ $ObjectInputFilter$Status* RegistryImpl::registryFilter($ObjectInputFilter$Filte
 
 RegistryImpl* RegistryImpl::createRegistry(int32_t regPort) {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if ($System::getSecurityManager() == nullptr) {
 		$System::setSecurityManager($$new($SecurityManager));
@@ -645,6 +652,7 @@ RegistryImpl* RegistryImpl::createRegistry(int32_t regPort) {
 
 void RegistryImpl::main($StringArray* args) {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	try {
 		int32_t regPort = ($nc(args)->length >= 1) ? $Integer::parseInt($nc(args)->get(0)) : $Registry::REGISTRY_PORT;
 		$assignStatic(RegistryImpl::registry, createRegistry(regPort));
@@ -669,6 +677,7 @@ void RegistryImpl::main($StringArray* args) {
 
 $AccessControlContext* RegistryImpl::getAccessControlContext(int32_t port) {
 	$init(RegistryImpl);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($PermissionCollection, perms, $cast($PermissionCollection, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($RegistryImpl$6)))));
 	$nc(perms)->add($$new($SocketPermission, "*"_s, "connect,accept"_s));

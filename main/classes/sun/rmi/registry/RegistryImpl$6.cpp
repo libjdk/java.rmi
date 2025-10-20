@@ -77,6 +77,7 @@ void RegistryImpl$6::init$() {
 }
 
 $Object* RegistryImpl$6::run() {
+	$useLocalCurrentObjectStackCache();
 	$var($CodeSource, codesource, $new($CodeSource, ($URL*)nullptr, ($CertificateArray*)nullptr));
 	$var($Policy, p, $Policy::getPolicy());
 	if (p != nullptr) {

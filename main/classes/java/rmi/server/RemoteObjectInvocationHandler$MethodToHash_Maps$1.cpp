@@ -80,6 +80,7 @@ void RemoteObjectInvocationHandler$MethodToHash_Maps$1::init$($RemoteObjectInvoc
 
 $Object* RemoteObjectInvocationHandler$MethodToHash_Maps$1::get(Object$* key) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($Long, hash, $cast($Long, $WeakHashMap::get(key)));
 		if (hash == nullptr) {
 			$var($Method, method, $cast($Method, key));

@@ -84,6 +84,7 @@ void SslRMIServerSocketFactory$1::init$($SslRMIServerSocketFactory* this$0, int3
 }
 
 $Socket* SslRMIServerSocketFactory$1::accept() {
+	$useLocalCurrentObjectStackCache();
 	$var($Socket, socket, $ServerSocket::accept());
 	$var($Socket, var$0, socket);
 	$var($String, var$1, $nc($($nc(socket)->getInetAddress()))->getHostName());

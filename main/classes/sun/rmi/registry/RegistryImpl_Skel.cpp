@@ -91,6 +91,7 @@ $OperationArray* RegistryImpl_Skel::getOperations() {
 }
 
 void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum, int64_t hash) {
+	$useLocalCurrentObjectStackCache();
 	if (opnum < 0) {
 		if (hash == (int64_t)0x693FB79BBB53CEFE) {
 			opnum = 0;
@@ -302,6 +303,7 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 }
 
 void clinit$RegistryImpl_Skel($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(RegistryImpl_Skel::operations, $new($OperationArray, {
 		$$new($Operation, "void bind(java.lang.String, java.rmi.Remote)"_s),
 		$$new($Operation, "java.lang.String list()[]"_s),

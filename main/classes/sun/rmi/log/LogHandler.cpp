@@ -74,6 +74,7 @@ void LogHandler::writeUpdate($LogOutputStream* out, Object$* value) {
 }
 
 $Object* LogHandler::readUpdate($LogInputStream* in, Object$* state) {
+	$useLocalCurrentObjectStackCache();
 	$var($MarshalInputStream, s, $new($MarshalInputStream, in));
 	return $of(applyUpdate($(s->readObject()), state));
 }

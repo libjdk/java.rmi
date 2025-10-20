@@ -202,6 +202,7 @@ void StreamRemoteCall::init$($Connection* c) {
 }
 
 void StreamRemoteCall::init$($Connection* c, $ObjID* id, int32_t op, int64_t hash) {
+	$useLocalCurrentObjectStackCache();
 	$set(this, in, nullptr);
 	$set(this, out, nullptr);
 	$set(this, filter, nullptr);
@@ -242,6 +243,7 @@ $ObjectOutput* StreamRemoteCall::getOutputStream(bool resultStream) {
 }
 
 void StreamRemoteCall::releaseOutputStream() {
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($Throwable, var$0, nullptr);
 		try {
@@ -280,6 +282,7 @@ void StreamRemoteCall::setObjectInputFilter($ObjectInputFilter* filter) {
 }
 
 $ObjectInput* StreamRemoteCall::getInputStream() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if (this->in == nullptr) {
 		$init($Transport);
@@ -323,6 +326,7 @@ void StreamRemoteCall::discardPendingRefs() {
 }
 
 $ObjectOutput* StreamRemoteCall::getResultStream(bool success) {
+	$useLocalCurrentObjectStackCache();
 	if (this->resultStarted) {
 		$throwNew($StreamCorruptedException, "result already in progress"_s);
 	} else {
@@ -341,6 +345,7 @@ $ObjectOutput* StreamRemoteCall::getResultStream(bool success) {
 }
 
 void StreamRemoteCall::executeCall() {
+	$useLocalCurrentObjectStackCache();
 	int8_t returnType = 0;
 	$var($DGCAckHandler, ackHandler, nullptr);
 	{
@@ -419,6 +424,7 @@ void StreamRemoteCall::executeCall() {
 }
 
 void StreamRemoteCall::exceptionReceivedFromServer($Exception* ex) {
+	$useLocalCurrentObjectStackCache();
 	$set(this, serverException, ex);
 	$var($StackTraceElementArray, serverTrace, $nc(ex)->getStackTrace());
 	$var($StackTraceElementArray, clientTrace, ($$new($Throwable))->getStackTrace());

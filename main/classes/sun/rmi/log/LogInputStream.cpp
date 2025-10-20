@@ -87,6 +87,7 @@ int32_t LogInputStream::read($bytes* b, int32_t off, int32_t len) {
 }
 
 int64_t LogInputStream::skip(int64_t n) {
+	$useLocalCurrentObjectStackCache();
 	if (n > $Integer::MAX_VALUE) {
 		$throwNew($IOException, $$str({"Too many bytes to skip - "_s, $$str(n)}));
 	}

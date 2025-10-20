@@ -205,6 +205,7 @@ void DGCImpl_Stub::init$($RemoteRef* ref) {
 }
 
 void DGCImpl_Stub::clean($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_long_2, $VMID* $param_VMID_3, bool $param_boolean_4) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(static_cast<$RemoteObject*>(this), DGCImpl_Stub::operations, 0, DGCImpl_Stub::interfaceHash)));
 		$nc(call)->setObjectInputFilter(static_cast<$ObjectInputFilter*>($$new(DGCImpl_Stub$$Lambda$leaseFilter)));
@@ -233,6 +234,7 @@ void DGCImpl_Stub::clean($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_lon
 }
 
 $Lease* DGCImpl_Stub::dirty($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_long_2, $Lease* $param_Lease_3) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var($StreamRemoteCall, call, $cast($StreamRemoteCall, $nc(this->ref)->newCall(static_cast<$RemoteObject*>(this), DGCImpl_Stub::operations, 1, DGCImpl_Stub::interfaceHash)));
 		$nc(call)->setObjectInputFilter(static_cast<$ObjectInputFilter*>($$new(DGCImpl_Stub$$Lambda$leaseFilter)));
@@ -349,6 +351,7 @@ $ObjectInputFilter$Status* DGCImpl_Stub::leaseFilter($ObjectInputFilter$FilterIn
 }
 
 void clinit$DGCImpl_Stub($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(DGCImpl_Stub::operations, $new($OperationArray, {
 		$$new($Operation, "void clean(java.rmi.server.ObjID[], long, java.rmi.dgc.VMID, boolean)"_s),
 		$$new($Operation, "java.rmi.dgc.Lease dirty(java.rmi.server.ObjID[], long, java.rmi.dgc.Lease)"_s)

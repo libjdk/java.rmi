@@ -165,6 +165,7 @@ void MarshalInputStream::setDoneCallback(Object$* key, $Runnable* callback) {
 }
 
 void MarshalInputStream::done() {
+	$useLocalCurrentObjectStackCache();
 	$var($Iterator, iter, $nc($($nc(this->doneCallbacks)->values()))->iterator());
 	while ($nc(iter)->hasNext()) {
 		$var($Runnable, callback, $cast($Runnable, iter->next()));
@@ -179,6 +180,7 @@ void MarshalInputStream::close() {
 }
 
 $Class* MarshalInputStream::resolveClass($ObjectStreamClass* classDesc) {
+	$useLocalCurrentObjectStackCache();
 	$var($Object, annotation, readLocation());
 	$var($String, className, $nc(classDesc)->getName());
 	$var($ClassLoader, defaultLoader, this->skipDefaultResolveClass$ ? ($ClassLoader*)nullptr : latestUserDefinedLoader());
@@ -207,6 +209,7 @@ $Class* MarshalInputStream::resolveClass($ObjectStreamClass* classDesc) {
 }
 
 $Class* MarshalInputStream::resolveProxyClass($StringArray* interfaces) {
+	$useLocalCurrentObjectStackCache();
 	$var($Object, annotation, readLocation());
 	$var($ClassLoader, defaultLoader, this->skipDefaultResolveClass$ ? ($ClassLoader*)nullptr : latestUserDefinedLoader());
 	$var($String, codebase, nullptr);
@@ -222,6 +225,7 @@ $ClassLoader* MarshalInputStream::latestUserDefinedLoader() {
 }
 
 $Class* MarshalInputStream::checkSunClass($String* className, $AccessControlException* e) {
+	$useLocalCurrentObjectStackCache();
 	$var($Permission, perm, $nc(e)->getPermission());
 	$var($String, name, nullptr);
 	if (perm != nullptr) {
@@ -257,6 +261,7 @@ $String* MarshalInputStream::lambda$static$0() {
 }
 
 void clinit$MarshalInputStream($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	MarshalInputStream::useCodebaseOnlyProperty = !$nc(($cast($String, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(MarshalInputStream$$Lambda$lambda$static$0)))))))->equalsIgnoreCase("false"_s);
 	$assignStatic(MarshalInputStream::permittedSunClasses, $new($HashMap, 3));

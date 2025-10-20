@@ -140,6 +140,7 @@ void RemoteObjectInvocationHandler::init$($RemoteRef* ref) {
 }
 
 $Object* RemoteObjectInvocationHandler::invoke(Object$* proxy, $Method* method, $ObjectArray* args) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if (!$Proxy::isProxyClass($nc($of(proxy))->getClass())) {
 		$throwNew($IllegalArgumentException, "not a proxy"_s);
@@ -160,6 +161,7 @@ $Object* RemoteObjectInvocationHandler::invoke(Object$* proxy, $Method* method, 
 }
 
 $Object* RemoteObjectInvocationHandler::invokeObjectMethod(Object$* proxy, $Method* method, $ObjectArray* args) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, name, $nc(method)->getName());
 	if ($nc(name)->equals("hashCode"_s)) {
@@ -182,6 +184,7 @@ $Object* RemoteObjectInvocationHandler::invokeObjectMethod(Object$* proxy, $Meth
 }
 
 $Object* RemoteObjectInvocationHandler::invokeRemoteMethod(Object$* proxy, $Method* method$renamed, $ObjectArray* args) {
+	$useLocalCurrentObjectStackCache();
 	$var($Method, method, method$renamed);
 	$beforeCallerSensitive();
 	try {
@@ -227,6 +230,7 @@ $Object* RemoteObjectInvocationHandler::invokeRemoteMethod(Object$* proxy, $Meth
 }
 
 $String* RemoteObjectInvocationHandler::proxyToString(Object$* proxy) {
+	$useLocalCurrentObjectStackCache();
 	$var($ClassArray, interfaces, $nc($of(proxy))->getClass()->getInterfaces());
 	if (interfaces->length == 0) {
 		return $str({"Proxy["_s, this, "]"_s});
@@ -243,11 +247,13 @@ $String* RemoteObjectInvocationHandler::proxyToString(Object$* proxy) {
 }
 
 void RemoteObjectInvocationHandler::readObjectNoData() {
+	$useLocalCurrentObjectStackCache();
 	$throwNew($InvalidObjectException, $$str({"no data in stream; class: "_s, $($of(this)->getClass()->getName())}));
 }
 
 int64_t RemoteObjectInvocationHandler::getMethodHash($Method* method) {
 	$init(RemoteObjectInvocationHandler);
+	$useLocalCurrentObjectStackCache();
 	return $nc(($cast($Long, $($nc(($cast($Map, $($nc(RemoteObjectInvocationHandler::methodToHash_Maps)->get($nc(method)->getDeclaringClass())))))->get(method)))))->longValue();
 }
 

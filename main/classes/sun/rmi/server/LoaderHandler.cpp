@@ -318,6 +318,7 @@ $URLArray* LoaderHandler::getDefaultCodebaseURLs() {
 
 $Class* LoaderHandler::loadClass($String* codebase, $String* name, $ClassLoader* defaultLoader) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($Log);
 	if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
@@ -345,6 +346,7 @@ $Class* LoaderHandler::loadClass($String* codebase, $String* name, $ClassLoader*
 
 $String* LoaderHandler::getClassAnnotation($Class* cl) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, name, $nc(cl)->getName());
 	int32_t nameLength = $nc(name)->length();
@@ -398,6 +400,7 @@ $String* LoaderHandler::getClassAnnotation($Class* cl) {
 
 $ClassLoader* LoaderHandler::getClassLoader($String* codebase) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$var($ClassLoader, parent, getRMIContextClassLoader());
 	$var($URLArray, urls, nullptr);
 	if (codebase != nullptr) {
@@ -436,6 +439,7 @@ void LoaderHandler::registerCodebaseLoader($ClassLoader* loader) {
 
 $Class* LoaderHandler::loadClass($URLArray* urls, $String* name) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($ClassLoader, parent, getRMIContextClassLoader());
 	$init($Log);
@@ -498,6 +502,7 @@ $Class* LoaderHandler::loadClass($URLArray* urls, $String* name) {
 
 $Class* LoaderHandler::loadProxyClass($String* codebase, $StringArray* interfaces, $ClassLoader* defaultLoader) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($Log);
 	if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
@@ -570,6 +575,7 @@ $Class* LoaderHandler::loadProxyClass($String* codebase, $StringArray* interface
 
 $Class* LoaderHandler::loadProxyClass($StringArray* interfaceNames, $ClassLoader* defaultLoader, $ClassLoader* codebaseLoader, bool preferCodebase) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($ClassLoader, proxyLoader, nullptr);
 	$var($ClassArray, classObjs, $new($ClassArray, $nc(interfaceNames)->length));
@@ -636,6 +642,7 @@ $Class* LoaderHandler::loadProxyClass($ClassLoader* loader, $ClassArray* interfa
 
 $ClassLoader* LoaderHandler::loadProxyInterfaces($StringArray* interfaces, $ClassLoader* loader, $ClassArray* classObjs, $booleans* nonpublic) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($ClassLoader, nonpublicLoader, nullptr);
 	for (int32_t i = 0; i < $nc(interfaces)->length; ++i) {
@@ -659,6 +666,7 @@ $ClassLoader* LoaderHandler::loadProxyInterfaces($StringArray* interfaces, $Clas
 
 $URLArray* LoaderHandler::pathToURLs($String* path) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$synchronized(LoaderHandler::pathToURLsCache) {
 		$var($ObjectArray, v, $cast($ObjectArray, $nc(LoaderHandler::pathToURLsCache)->get(path)));
 		if (v != nullptr) {
@@ -681,6 +689,7 @@ $URLArray* LoaderHandler::pathToURLs($String* path) {
 
 $String* LoaderHandler::urlsToPath($URLArray* urls) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	if ($nc(urls)->length == 0) {
 		return nullptr;
 	} else if (urls->length == 1) {
@@ -703,6 +712,7 @@ $ClassLoader* LoaderHandler::getRMIContextClassLoader() {
 
 $LoaderHandler$Loader* LoaderHandler::lookupLoader($URLArray* urls, $ClassLoader* parent) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($LoaderHandler$LoaderEntry, entry, nullptr);
 	$var($LoaderHandler$Loader, loader, nullptr);
@@ -730,6 +740,7 @@ $LoaderHandler$Loader* LoaderHandler::lookupLoader($URLArray* urls, $ClassLoader
 
 $AccessControlContext* LoaderHandler::getLoaderAccessControlContext($URLArray* urls) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($PermissionCollection, perms, $cast($PermissionCollection, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($LoaderHandler$2)))));
 	$nc(perms)->add($$new($RuntimePermission, "createClassLoader"_s));
@@ -741,6 +752,7 @@ $AccessControlContext* LoaderHandler::getLoaderAccessControlContext($URLArray* u
 
 void LoaderHandler::addPermissionsForURLs($URLArray* urls, $PermissionCollection* perms, bool forLoader) {
 	$init(LoaderHandler);
+	$useLocalCurrentObjectStackCache();
 	for (int32_t i = 0; i < $nc(urls)->length; ++i) {
 		$var($URL, url, urls->get(i));
 		try {
@@ -813,6 +825,7 @@ $String* LoaderHandler::lambda$static$0() {
 }
 
 void clinit$LoaderHandler($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	LoaderHandler::logLevel = $LogStream::parseLevel($cast($String, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(LoaderHandler$$Lambda$lambda$static$0))))));
 	$assignStatic(LoaderHandler::loaderLog, $Log::getLog("sun.rmi.loader"_s, "loader"_s, LoaderHandler::logLevel));

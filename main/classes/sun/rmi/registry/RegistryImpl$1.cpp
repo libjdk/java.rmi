@@ -93,6 +93,7 @@ void RegistryImpl$1::init$($RegistryImpl* this$0, int32_t val$port, $RMIClientSo
 }
 
 $Object* RegistryImpl$1::run() {
+	$useLocalCurrentObjectStackCache();
 	$init($RegistryImpl);
 	$var($LiveRef, lref, $new($LiveRef, $RegistryImpl::id, this->val$port, this->val$csf, this->val$ssf));
 	this->this$0->setup($$new($UnicastServerRef2, lref, this->val$serialFilter));

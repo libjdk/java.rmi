@@ -112,6 +112,7 @@ void SslRMIServerSocketFactory::init$($StringArray* enabledCipherSuites, $String
 }
 
 void SslRMIServerSocketFactory::init$($SSLContext* context, $StringArray* enabledCipherSuites, $StringArray* enabledProtocols, bool needClientAuth) {
+	$useLocalCurrentObjectStackCache();
 	$set(this, enabledCipherSuites, enabledCipherSuites == nullptr ? ($StringArray*)nullptr : $cast($StringArray, $nc(enabledCipherSuites)->clone()));
 	$set(this, enabledProtocols, enabledProtocols == nullptr ? ($StringArray*)nullptr : $cast($StringArray, $nc(enabledProtocols)->clone()));
 	this->needClientAuth = needClientAuth;
@@ -170,6 +171,7 @@ bool SslRMIServerSocketFactory::equals(Object$* obj) {
 }
 
 bool SslRMIServerSocketFactory::checkParameters(SslRMIServerSocketFactory* that) {
+	$useLocalCurrentObjectStackCache();
 	if (this->context == nullptr ? $nc(that)->context != nullptr : !$nc($of(this->context))->equals(that->context)) {
 		return false;
 	}

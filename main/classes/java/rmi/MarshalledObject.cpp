@@ -83,6 +83,7 @@ $Object* allocate$MarshalledObject($Class* clazz) {
 }
 
 void MarshalledObject::init$(Object$* obj) {
+	$useLocalCurrentObjectStackCache();
 	$set(this, objBytes, nullptr);
 	$set(this, locBytes, nullptr);
 	$set(this, objectInputFilter, nullptr);
@@ -110,6 +111,7 @@ void MarshalledObject::readObject($ObjectInputStream* stream) {
 }
 
 $Object* MarshalledObject::get() {
+	$useLocalCurrentObjectStackCache();
 	if (this->objBytes == nullptr) {
 		return $of(nullptr);
 	}

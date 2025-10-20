@@ -236,6 +236,7 @@ bool ObjectTable::unexportObject($Remote* obj, bool force) {
 
 void ObjectTable::putTarget($Target* target) {
 	$init(ObjectTable);
+	$useLocalCurrentObjectStackCache();
 	$var($ObjectEndpoint, oe, $nc(target)->getObjectEndpoint());
 	$var($WeakRef, weakImpl, target->getWeakImpl());
 	$init($DGCImpl);
@@ -263,6 +264,7 @@ void ObjectTable::putTarget($Target* target) {
 
 void ObjectTable::removeTarget($Target* target) {
 	$init(ObjectTable);
+	$useLocalCurrentObjectStackCache();
 	$var($ObjectEndpoint, oe, $nc(target)->getObjectEndpoint());
 	$var($WeakRef, weakImpl, target->getWeakImpl());
 	$init($DGCImpl);
@@ -277,6 +279,7 @@ void ObjectTable::removeTarget($Target* target) {
 
 void ObjectTable::referenced($ObjID* id, int64_t sequenceNum, $VMID* vmid) {
 	$init(ObjectTable);
+	$useLocalCurrentObjectStackCache();
 	$synchronized(ObjectTable::tableLock) {
 		$var($ObjectEndpoint, oe, $new($ObjectEndpoint, id, $($Transport::currentTransport())));
 		$var($Target, target, $cast($Target, $nc(ObjectTable::objTable)->get(oe)));
@@ -288,6 +291,7 @@ void ObjectTable::referenced($ObjID* id, int64_t sequenceNum, $VMID* vmid) {
 
 void ObjectTable::unreferenced($ObjID* id, int64_t sequenceNum, $VMID* vmid, bool strong) {
 	$init(ObjectTable);
+	$useLocalCurrentObjectStackCache();
 	$synchronized(ObjectTable::tableLock) {
 		$var($ObjectEndpoint, oe, $new($ObjectEndpoint, id, $($Transport::currentTransport())));
 		$var($Target, target, $cast($Target, $nc(ObjectTable::objTable)->get(oe)));
@@ -299,6 +303,7 @@ void ObjectTable::unreferenced($ObjID* id, int64_t sequenceNum, $VMID* vmid, boo
 
 void ObjectTable::incrementKeepAliveCount() {
 	$init(ObjectTable);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$synchronized(ObjectTable::keepAliveLock) {
 		++ObjectTable::keepAliveCount;
@@ -335,6 +340,7 @@ $Long* ObjectTable::lambda$static$0() {
 }
 
 void clinit$ObjectTable($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	ObjectTable::gcInterval = $nc(($cast($Long, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(ObjectTable$$Lambda$lambda$static$0)))))))->longValue();
 	$assignStatic(ObjectTable::tableLock, $new($Object));

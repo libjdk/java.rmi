@@ -79,6 +79,7 @@ void Naming::init$() {
 }
 
 $Remote* Naming::lookup($String* name) {
+	$useLocalCurrentObjectStackCache();
 	$var($Naming$ParsedNamingURL, parsed, parseURL(name));
 	$var($Registry, registry, getRegistry(parsed));
 	if ($nc(parsed)->name == nullptr) {
@@ -88,6 +89,7 @@ $Remote* Naming::lookup($String* name) {
 }
 
 void Naming::bind($String* name, $Remote* obj) {
+	$useLocalCurrentObjectStackCache();
 	$var($Naming$ParsedNamingURL, parsed, parseURL(name));
 	$var($Registry, registry, getRegistry(parsed));
 	if (obj == nullptr) {
@@ -97,12 +99,14 @@ void Naming::bind($String* name, $Remote* obj) {
 }
 
 void Naming::unbind($String* name) {
+	$useLocalCurrentObjectStackCache();
 	$var($Naming$ParsedNamingURL, parsed, parseURL(name));
 	$var($Registry, registry, getRegistry(parsed));
 	$nc(registry)->unbind($nc(parsed)->name);
 }
 
 void Naming::rebind($String* name, $Remote* obj) {
+	$useLocalCurrentObjectStackCache();
 	$var($Naming$ParsedNamingURL, parsed, parseURL(name));
 	$var($Registry, registry, getRegistry(parsed));
 	if (obj == nullptr) {
@@ -112,6 +116,7 @@ void Naming::rebind($String* name, $Remote* obj) {
 }
 
 $StringArray* Naming::list($String* name) {
+	$useLocalCurrentObjectStackCache();
 	$var($Naming$ParsedNamingURL, parsed, parseURL(name));
 	$var($Registry, registry, getRegistry(parsed));
 	$var($String, prefix, ""_s);
@@ -134,6 +139,7 @@ $Registry* Naming::getRegistry($Naming$ParsedNamingURL* parsed) {
 }
 
 $Naming$ParsedNamingURL* Naming::parseURL($String* str) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		return intParseURL(str);
 	} catch ($URISyntaxException&) {
@@ -165,6 +171,7 @@ $Naming$ParsedNamingURL* Naming::parseURL($String* str) {
 }
 
 $Naming$ParsedNamingURL* Naming::intParseURL($String* str) {
+	$useLocalCurrentObjectStackCache();
 	$var($URI, uri, $new($URI, str));
 	if (uri->isOpaque()) {
 		$throwNew($MalformedURLException, $$str({"not a hierarchical URL: "_s, str}));

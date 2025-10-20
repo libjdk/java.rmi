@@ -234,6 +234,7 @@ $StackWalker$StackFrame* Log::getSource() {
 
 $StackWalker$StackFrame* Log::lambda$getSource$1($Stream* s) {
 	$init(Log);
+	$useLocalCurrentObjectStackCache();
 	return $cast($StackWalker$StackFrame, $nc($($nc($($nc(s)->skip(3)))->findFirst()))->get());
 }
 
@@ -243,6 +244,7 @@ $Boolean* Log::lambda$static$0() {
 }
 
 void clinit$Log($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($Level);
 	$assignStatic(Log::BRIEF, $Level::FINE);

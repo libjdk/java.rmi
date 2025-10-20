@@ -235,6 +235,7 @@ $Object* allocate$Target($Class* clazz) {
 int32_t Target::nextThreadNum = 0;
 
 void Target::init$($Remote* impl, $Dispatcher* disp, $Remote* stub, $ObjID* id, bool permanent) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$set(this, refSet, $new($Vector));
 	$set(this, sequenceTable, $new($Hashtable, 5));
@@ -334,6 +335,7 @@ void Target::setExportedTransport($Transport* exportedTransport) {
 
 void Target::referenced(int64_t sequenceNum, $VMID* vmid) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($SequenceEntry, entry, $cast($SequenceEntry, $nc(this->sequenceTable)->get(vmid)));
 		if (entry == nullptr) {
 			$nc(this->sequenceTable)->put(vmid, $$new($SequenceEntry, sequenceNum));
@@ -360,6 +362,7 @@ void Target::referenced(int64_t sequenceNum, $VMID* vmid) {
 
 void Target::unreferenced(int64_t sequenceNum, $VMID* vmid, bool strong) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($SequenceEntry, entry, $cast($SequenceEntry, $nc(this->sequenceTable)->get(vmid)));
 		if (entry == nullptr || $nc(entry)->sequenceNum > sequenceNum) {
 			return;
@@ -379,6 +382,7 @@ void Target::unreferenced(int64_t sequenceNum, $VMID* vmid, bool strong) {
 
 void Target::refSetRemove($VMID* vmid) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$beforeCallerSensitive();
 		$nc($($DGCImpl::getDGCImpl()))->unregisterTarget(vmid, this);
 		bool var$0 = $nc(this->refSet)->removeElement(vmid);
@@ -400,6 +404,7 @@ void Target::refSetRemove($VMID* vmid) {
 
 bool Target::unexport(bool force) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if ((force == true) || (this->callCount == 0) || (this->disp == nullptr)) {
 			$set(this, disp, nullptr);
 			unpinImpl();
@@ -469,6 +474,7 @@ void Target::vmidDead($VMID* vmid) {
 }
 
 void Target::lambda$refSetRemove$1($Unreferenced* unrefObj) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$($Thread::currentThread())->setContextClassLoader(this->ccl);
 	$AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(Target$$Lambda$lambda$refSetRemove$0$1, unrefObj)), this->acc);

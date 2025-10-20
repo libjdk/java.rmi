@@ -72,6 +72,7 @@ void WeakClassHashMap::init$() {
 }
 
 $Object* WeakClassHashMap::get($Class* remoteClass) {
+	$useLocalCurrentObjectStackCache();
 	$var($WeakClassHashMap$ValueCell, valueCell, nullptr);
 	$synchronized(this->internalMap) {
 		$assign(valueCell, $cast($WeakClassHashMap$ValueCell, $nc(this->internalMap)->get(remoteClass)));

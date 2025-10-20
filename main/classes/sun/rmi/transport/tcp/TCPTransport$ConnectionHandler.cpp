@@ -205,6 +205,7 @@ $String* TCPTransport$ConnectionHandler::getClientHost() {
 }
 
 void TCPTransport$ConnectionHandler::checkAcceptPermission($SecurityManager* sm, $AccessControlContext* acc) {
+	$useLocalCurrentObjectStackCache();
 	if (sm != this->cacheSecurityManager) {
 		$set(this, okContext, nullptr);
 		$set(this, authCache, $new($WeakHashMap));
@@ -222,6 +223,7 @@ void TCPTransport$ConnectionHandler::checkAcceptPermission($SecurityManager* sm,
 }
 
 void TCPTransport$ConnectionHandler::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($Thread, t, $Thread::currentThread());
 	$var($String, name, t->getName());
@@ -243,6 +245,7 @@ void TCPTransport$ConnectionHandler::run() {
 }
 
 void TCPTransport$ConnectionHandler::run0() {
+	$useLocalCurrentObjectStackCache();
 	$var($TCPEndpoint, endpoint, this->this$0->getEndpoint());
 	int32_t port = $nc(endpoint)->getPort();
 	$nc($TCPTransport::threadConnectionHandler)->set(this);

@@ -88,6 +88,7 @@ void Log$LoggerPrintStream::init$($Logger* logger) {
 }
 
 void Log$LoggerPrintStream::write(int32_t b) {
+	$useLocalCurrentObjectStackCache();
 	if ((this->last == u'\r') && (b == u'\n')) {
 		this->last = -1;
 		return;

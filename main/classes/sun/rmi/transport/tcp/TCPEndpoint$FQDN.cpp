@@ -84,6 +84,7 @@ void TCPEndpoint$FQDN::init$($String* hostAddress) {
 
 $String* TCPEndpoint$FQDN::attemptFQDN($InetAddress* localAddr) {
 	$init(TCPEndpoint$FQDN);
+	$useLocalCurrentObjectStackCache();
 	$var($String, hostName, $nc(localAddr)->getHostName());
 	if ($nc(hostName)->indexOf((int32_t)u'.') < 0) {
 		$var($String, hostAddress, localAddr->getHostAddress());
@@ -108,6 +109,7 @@ $String* TCPEndpoint$FQDN::attemptFQDN($InetAddress* localAddr) {
 }
 
 void TCPEndpoint$FQDN::getFQDN() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($Thread, t, $cast($Thread, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction, this, "FQDN Finder"_s, true)))));
 	$nc(t)->start();
@@ -120,6 +122,7 @@ $String* TCPEndpoint$FQDN::getHost() {
 }
 
 void TCPEndpoint$FQDN::run() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, name, nullptr);
 	{
 		$var($Throwable, var$0, nullptr);

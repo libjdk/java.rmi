@@ -470,6 +470,7 @@ $RemoteStub* UnicastServerRef::exportObject($Remote* impl, Object$* data) {
 }
 
 $Remote* UnicastServerRef::exportObject($Remote* impl, Object$* data, bool permanent) {
+	$useLocalCurrentObjectStackCache();
 	$Class* implClass = $nc($of(impl))->getClass();
 	$var($Remote, stub, nullptr);
 	try {
@@ -503,6 +504,7 @@ void UnicastServerRef::setSkeleton($Remote* impl) {
 }
 
 void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	int32_t num = 0;
 	int64_t op = 0;
@@ -623,6 +625,7 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 }
 
 void UnicastServerRef::unmarshalCustomCallData($ObjectInput* in) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if (this->filter != nullptr && $instanceOf($ObjectInputStream, in)) {
 		$var($ObjectInputStream, ois, $cast($ObjectInputStream, in));
@@ -631,6 +634,7 @@ void UnicastServerRef::unmarshalCustomCallData($ObjectInput* in) {
 }
 
 void UnicastServerRef::oldDispatch($Remote* obj, $RemoteCall* call, int32_t op) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	int64_t hash = 0;
 	$var($ObjectInput, in, nullptr);
@@ -657,6 +661,7 @@ void UnicastServerRef::oldDispatch($Remote* obj, $RemoteCall* call, int32_t op) 
 
 void UnicastServerRef::clearStackTraces($Throwable* t$renamed) {
 	$init(UnicastServerRef);
+	$useLocalCurrentObjectStackCache();
 	$var($Throwable, t, t$renamed);
 	$var($StackTraceElementArray, empty, $new($StackTraceElementArray, 0));
 	while (t != nullptr) {
@@ -666,6 +671,7 @@ void UnicastServerRef::clearStackTraces($Throwable* t$renamed) {
 }
 
 void UnicastServerRef::logCall($Remote* obj, Object$* method) {
+	$useLocalCurrentObjectStackCache();
 	$init($Log);
 	if ($nc(UnicastServerRef::callLog)->isLoggable($Log::VERBOSE)) {
 		$var($String, clientHost, nullptr);
@@ -684,6 +690,7 @@ void UnicastServerRef::logCall($Remote* obj, Object$* method) {
 }
 
 void UnicastServerRef::logCallException($Throwable* e) {
+	$useLocalCurrentObjectStackCache();
 	$init($Log);
 	if ($nc(UnicastServerRef::callLog)->isLoggable($Log::BRIEF)) {
 		$var($String, clientHost, ""_s);
@@ -746,6 +753,7 @@ $Boolean* UnicastServerRef::lambda$static$0() {
 }
 
 void clinit$UnicastServerRef($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	UnicastServerRef::logCalls = $nc(($cast($Boolean, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(UnicastServerRef$$Lambda$lambda$static$0)))))))->booleanValue();
 	$assignStatic(UnicastServerRef::callLog, $Log::getLog("sun.rmi.server.call"_s, "RMI"_s, UnicastServerRef::logCalls));

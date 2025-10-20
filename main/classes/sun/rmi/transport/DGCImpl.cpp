@@ -337,6 +337,7 @@ DGCImpl* DGCImpl::getDGCImpl() {
 
 $ObjectInputFilter* DGCImpl::initDgcFilter() {
 	$init(DGCImpl);
+	$useLocalCurrentObjectStackCache();
 	$var($ObjectInputFilter, filter, nullptr);
 	$var($String, props, $System::getProperty(DGCImpl::DGC_FILTER_PROPNAME));
 	if (props == nullptr) {
@@ -358,6 +359,7 @@ void DGCImpl::init$() {
 }
 
 $Lease* DGCImpl::dirty($ObjIDArray* ids, int64_t sequenceNum, $Lease* lease$renamed) {
+	$useLocalCurrentObjectStackCache();
 	$var($Lease, lease, lease$renamed);
 	$var($VMID, vmid, $nc(lease)->getVMID());
 	int64_t duration = DGCImpl::leaseValue;
@@ -409,6 +411,7 @@ $Lease* DGCImpl::dirty($ObjIDArray* ids, int64_t sequenceNum, $Lease* lease$rena
 }
 
 void DGCImpl::clean($ObjIDArray* ids, int64_t sequenceNum, $VMID* vmid, bool strong) {
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($ObjIDArray, arr$, ids);
 		int32_t len$ = $nc(arr$)->length;
@@ -447,6 +450,7 @@ void DGCImpl::unregisterTarget($VMID* vmid, $Target* target) {
 }
 
 void DGCImpl::checkLeases() {
+	$useLocalCurrentObjectStackCache();
 	int64_t time = $System::currentTimeMillis();
 	$var($List, toUnregister, $new($ArrayList));
 	$synchronized(this->leaseTable) {
@@ -536,6 +540,7 @@ $String* DGCImpl::lambda$static$0() {
 }
 
 void clinit$DGCImpl($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(DGCImpl::DGC_FILTER_PROPNAME, "sun.rmi.transport.dgcFilter"_s);
 	$beforeCallerSensitive();
 	$assignStatic(DGCImpl::dgcLog, $Log::getLog("sun.rmi.dgc"_s, "dgc"_s, $LogStream::parseLevel($cast($String, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(DGCImpl$$Lambda$lambda$static$0))))))));

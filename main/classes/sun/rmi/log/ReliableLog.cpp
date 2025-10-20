@@ -249,6 +249,7 @@ int64_t ReliableLog::diskPageSize = 0;
 $Constructor* ReliableLog::logClassConstructor = nullptr;
 
 void ReliableLog::init$($String* dirPath, $LogHandler* handler, bool pad) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	this->Debug = false;
 	this->version = 0;
@@ -293,6 +294,7 @@ void ReliableLog::init$($String* dirPath, $LogHandler* handler) {
 
 $Object* ReliableLog::recover() {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (this->Debug) {
 			$init($System);
 			$nc($System::err)->println("log.debug: recover()"_s);
@@ -346,6 +348,7 @@ void ReliableLog::update(Object$* value) {
 
 void ReliableLog::update(Object$* value, bool forceToDisk) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (this->log == nullptr) {
 			$throwNew($IOException, "log is inaccessible, it may have been corrupted or closed"_s);
 		}
@@ -384,6 +387,7 @@ void ReliableLog::update(Object$* value, bool forceToDisk) {
 
 $Constructor* ReliableLog::getLogClassConstructor() {
 	$init(ReliableLog);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, logClassName, $cast($String, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(ReliableLog$$Lambda$lambda$getLogClassConstructor$1$1)))));
 	if (logClassName != nullptr) {
@@ -408,6 +412,7 @@ $Constructor* ReliableLog::getLogClassConstructor() {
 
 void ReliableLog::snapshot(Object$* value) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		int32_t oldVersion = this->version;
 		incrVersion();
 		$var($String, fname, versionName(ReliableLog::snapshotPrefix));
@@ -491,6 +496,7 @@ $String* ReliableLog::versionName($String* name) {
 }
 
 $String* ReliableLog::versionName($String* prefix, int32_t ver) {
+	$useLocalCurrentObjectStackCache();
 	ver = (ver == 0) ? this->version : ver;
 	$var($String, var$0, $(fName(prefix)));
 	return $concat(var$0, $($String::valueOf(ver)));
@@ -503,6 +509,7 @@ void ReliableLog::incrVersion() {
 }
 
 void ReliableLog::deleteFile($String* name) {
+	$useLocalCurrentObjectStackCache();
 	$var($File, f, $new($File, name));
 	if (!f->delete$()) {
 		$throwNew($IOException, $$str({"couldn\'t remove file: "_s, name}));
@@ -528,6 +535,7 @@ void ReliableLog::deleteLogFile(int32_t ver) {
 }
 
 void ReliableLog::openLogFile(bool truncate) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	try {
 		close();
@@ -560,6 +568,7 @@ void ReliableLog::initializeLogFile() {
 }
 
 void ReliableLog::writeVersionFile(bool newVersion) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, name, nullptr);
 	if (newVersion) {
 		$assign(name, ReliableLog::newVersionFile);
@@ -630,6 +639,7 @@ void ReliableLog::commitToNewVersion() {
 }
 
 int32_t ReliableLog::readVersion($String* name) {
+	$useLocalCurrentObjectStackCache();
 	{
 		$var($DataInputStream, in, $new($DataInputStream, $$new($FileInputStream, name)));
 		{
@@ -668,6 +678,7 @@ int32_t ReliableLog::readVersion($String* name) {
 }
 
 void ReliableLog::getVersion() {
+	$useLocalCurrentObjectStackCache();
 	try {
 		this->version = readVersion($(fName(ReliableLog::newVersionFile)));
 		commitToNewVersion();
@@ -688,6 +699,7 @@ void ReliableLog::getVersion() {
 }
 
 $Object* ReliableLog::recoverUpdates(Object$* state$renamed) {
+	$useLocalCurrentObjectStackCache();
 	$var($Object, state, state$renamed);
 	this->logBytes = 0;
 	this->logEntries = 0;

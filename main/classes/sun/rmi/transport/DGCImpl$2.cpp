@@ -170,6 +170,7 @@ void DGCImpl$2::init$() {
 }
 
 $Object* DGCImpl$2::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($ClassLoader, savedCcl, $($Thread::currentThread())->getContextClassLoader());
 	{

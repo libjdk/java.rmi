@@ -215,6 +215,7 @@ $Long* DGCAckHandler::lambda$static$0() {
 }
 
 void clinit$DGCAckHandler($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	DGCAckHandler::$assertionsDisabled = !DGCAckHandler::class$->desiredAssertionStatus();
 	DGCAckHandler::dgcAckTimeout = $nc(($cast($Long, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(DGCAckHandler$$Lambda$lambda$static$0)))))))->longValue();

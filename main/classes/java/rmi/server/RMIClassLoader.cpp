@@ -178,6 +178,7 @@ $String* RMIClassLoader::getClassAnnotation($Class* cl) {
 
 $RMIClassLoaderSpi* RMIClassLoader::getDefaultProviderInstance() {
 	$init(RMIClassLoader);
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm != nullptr) {
 		sm->checkPermission($$new($RuntimePermission, "setFactory"_s));
@@ -197,6 +198,7 @@ $RMIClassLoaderSpi* RMIClassLoader::newDefaultProviderInstance() {
 
 $RMIClassLoaderSpi* RMIClassLoader::initializeProvider() {
 	$init(RMIClassLoader);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, providerClassName, $System::getProperty("java.rmi.server.RMIClassLoaderSpi"_s));
 	if (providerClassName != nullptr) {

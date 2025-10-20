@@ -61,6 +61,7 @@ void ServerCloneException::init$($String* s, $Exception* cause) {
 }
 
 $String* ServerCloneException::getMessage() {
+	$useLocalCurrentObjectStackCache();
 	if (this->detail == nullptr) {
 		return $CloneNotSupportedException::getMessage();
 	} else {

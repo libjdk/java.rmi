@@ -273,6 +273,7 @@ $Long* DGCClient::lambda$static$0() {
 }
 
 void clinit$DGCClient($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	DGCClient::nextSequenceNum = $Long::MIN_VALUE;
 	$assignStatic(DGCClient::vmid, $new($VMID));

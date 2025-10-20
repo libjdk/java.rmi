@@ -204,6 +204,7 @@ DGCClient$EndpointEntry* DGCClient$EndpointEntry::lookup($Endpoint* ep) {
 }
 
 void DGCClient$EndpointEntry::init$($Endpoint* endpoint) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$set(this, refTable, $new($HashMap, 5));
 	$set(this, invalidRefs, $new($HashSet, 5));
@@ -230,6 +231,7 @@ void DGCClient$EndpointEntry::init$($Endpoint* endpoint) {
 }
 
 bool DGCClient$EndpointEntry::registerRefs($List* refs) {
+	$useLocalCurrentObjectStackCache();
 	if (!DGCClient$EndpointEntry::$assertionsDisabled && ! !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
 	}
@@ -269,6 +271,7 @@ bool DGCClient$EndpointEntry::registerRefs($List* refs) {
 }
 
 void DGCClient$EndpointEntry::removeRefEntry($DGCClient$EndpointEntry$RefEntry* refEntry) {
+	$useLocalCurrentObjectStackCache();
 	if (!DGCClient$EndpointEntry::$assertionsDisabled && !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
 	}
@@ -298,6 +301,7 @@ void DGCClient$EndpointEntry::removeRefEntry($DGCClient$EndpointEntry$RefEntry* 
 }
 
 void DGCClient$EndpointEntry::makeDirtyCall($Set* refEntries, int64_t sequenceNum) {
+	$useLocalCurrentObjectStackCache();
 	if (!DGCClient$EndpointEntry::$assertionsDisabled && ! !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
 	}
@@ -379,6 +383,7 @@ void DGCClient$EndpointEntry::setRenewTime(int64_t newRenewTime) {
 }
 
 void DGCClient$EndpointEntry::processPhantomRefs($DGCClient$EndpointEntry$RefEntry$PhantomLiveRef* phantom$renamed) {
+	$useLocalCurrentObjectStackCache();
 	$var($DGCClient$EndpointEntry$RefEntry$PhantomLiveRef, phantom, phantom$renamed);
 	if (!DGCClient$EndpointEntry::$assertionsDisabled && !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
@@ -414,6 +419,7 @@ void DGCClient$EndpointEntry::processPhantomRefs($DGCClient$EndpointEntry$RefEnt
 }
 
 void DGCClient$EndpointEntry::makeCleanCalls() {
+	$useLocalCurrentObjectStackCache();
 	if (!DGCClient$EndpointEntry::$assertionsDisabled && ! !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
 	}
@@ -435,6 +441,7 @@ void DGCClient$EndpointEntry::makeCleanCalls() {
 
 $ObjIDArray* DGCClient$EndpointEntry::createObjIDArray($Set* refEntries) {
 	$init(DGCClient$EndpointEntry);
+	$useLocalCurrentObjectStackCache();
 	$var($ObjIDArray, ids, $new($ObjIDArray, $nc(refEntries)->size()));
 	$var($Iterator, iter, refEntries->iterator());
 	for (int32_t i = 0; i < ids->length; ++i) {

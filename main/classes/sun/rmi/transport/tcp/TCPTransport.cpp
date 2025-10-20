@@ -392,6 +392,7 @@ $RMISocketFactory* TCPTransport::defaultSocketFactory = nullptr;
 int32_t TCPTransport::connectionReadTimeout = 0;
 
 void TCPTransport::init$($LinkedList* epList) {
+	$useLocalCurrentObjectStackCache();
 	$Transport::init$();
 	this->exportCount = 0;
 	$set(this, server, nullptr);
@@ -404,6 +405,7 @@ void TCPTransport::init$($LinkedList* epList) {
 }
 
 void TCPTransport::shedConnectionCaches() {
+	$useLocalCurrentObjectStackCache();
 	$var($List, channels, nullptr);
 	$synchronized(this->channelTable) {
 		$assign(channels, $new($ArrayList, $nc($($nc(this->channelTable)->values()))->size()));
@@ -432,6 +434,7 @@ void TCPTransport::shedConnectionCaches() {
 }
 
 $Channel* TCPTransport::getChannel($Endpoint* ep) {
+	$useLocalCurrentObjectStackCache();
 	$var($TCPChannel, ch, nullptr);
 	if ($instanceOf($TCPEndpoint, ep)) {
 		$synchronized(this->channelTable) {
@@ -450,6 +453,7 @@ $Channel* TCPTransport::getChannel($Endpoint* ep) {
 }
 
 void TCPTransport::free($Endpoint* ep) {
+	$useLocalCurrentObjectStackCache();
 	if ($instanceOf($TCPEndpoint, ep)) {
 		$synchronized(this->channelTable) {
 			$var($Reference, ref, $cast($Reference, $nc(this->channelTable)->remove(ep)));
@@ -496,6 +500,7 @@ void TCPTransport::targetUnexported() {
 }
 
 void TCPTransport::decrementExportCount() {
+	$useLocalCurrentObjectStackCache();
 	if (!TCPTransport::$assertionsDisabled && !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
 	}
@@ -522,6 +527,7 @@ void TCPTransport::decrementExportCount() {
 }
 
 void TCPTransport::checkAcceptPermission($AccessControlContext* acc) {
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm == nullptr) {
 		return;
@@ -540,6 +546,7 @@ $TCPEndpoint* TCPTransport::getEndpoint() {
 }
 
 void TCPTransport::listen() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if (!TCPTransport::$assertionsDisabled && !$Thread::holdsLock(this)) {
 		$throwNew($AssertionError);
@@ -572,6 +579,7 @@ void TCPTransport::listen() {
 
 void TCPTransport::closeSocket($Socket* sock) {
 	$init(TCPTransport);
+	$useLocalCurrentObjectStackCache();
 	try {
 		$init($Log);
 		if ($nc(TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
@@ -588,6 +596,7 @@ void TCPTransport::closeSocket($Socket* sock) {
 }
 
 void TCPTransport::handleMessages($Connection* conn, bool persistent) {
+	$useLocalCurrentObjectStackCache();
 	int32_t port = $nc($(getEndpoint()))->getPort();
 	{
 		$var($Throwable, var$0, nullptr);
@@ -700,6 +709,7 @@ $String* TCPTransport::lambda$static$0() {
 }
 
 void clinit$TCPTransport($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	TCPTransport::$assertionsDisabled = !TCPTransport::class$->desiredAssertionStatus();
 	$assignStatic(TCPTransport::tcpLog, $Log::getLog("sun.rmi.transport.tcp"_s, "tcp"_s, $LogStream::parseLevel($cast($String, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPTransport$$Lambda$lambda$static$0))))))));

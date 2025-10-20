@@ -202,6 +202,7 @@ void LogStream::setDefaultStream($PrintStream* newDefault) {
 	$load(LogStream);
 	$synchronized(class$) {
 		$init(LogStream);
+		$useLocalCurrentObjectStackCache();
 		$var($SecurityManager, sm, $System::getSecurityManager());
 		if (sm != nullptr) {
 			sm->checkPermission($$new($LoggingPermission, "control"_s, nullptr));
@@ -224,6 +225,7 @@ void LogStream::setOutputStream($OutputStream* out) {
 }
 
 void LogStream::write(int32_t b) {
+	$useLocalCurrentObjectStackCache();
 	if (b == u'\n') {
 		$synchronized(this) {
 			$synchronized(this->logOut) {
@@ -278,6 +280,7 @@ $String* LogStream::toString() {
 
 int32_t LogStream::parseLevel($String* s) {
 	$init(LogStream);
+	$useLocalCurrentObjectStackCache();
 	if ((s == nullptr) || ($nc(s)->length() < 1)) {
 		return -1;
 	}

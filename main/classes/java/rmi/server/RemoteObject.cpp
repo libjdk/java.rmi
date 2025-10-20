@@ -144,6 +144,7 @@ bool RemoteObject::equals(Object$* obj) {
 }
 
 $String* RemoteObject::toString() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, classname, $Util::getUnqualifiedName($of(this)->getClass()));
 	return (this->ref == nullptr) ? classname : $str({classname, "["_s, $($nc(this->ref)->remoteToString()), "]"_s});
 }
@@ -164,6 +165,7 @@ void RemoteObject::writeObject($ObjectOutputStream* out) {
 }
 
 void RemoteObject::readObject($ObjectInputStream* in) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, refClassName, $nc(in)->readUTF());
 	if (refClassName == nullptr || $nc(refClassName)->length() == 0) {

@@ -278,6 +278,7 @@ void Util::init$() {
 
 $Remote* Util::createProxy($Class* implClass, $RemoteRef* clientRef, bool forceStubUse) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$Class* remoteClass = nullptr;
 	try {
@@ -303,6 +304,7 @@ $Remote* Util::createProxy($Class* implClass, $RemoteRef* clientRef, bool forceS
 
 bool Util::stubClassExists($Class* remoteClass) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	if (!$nc(Util::withoutStubs)->containsKey(remoteClass)) {
 		try {
@@ -319,6 +321,7 @@ bool Util::stubClassExists($Class* remoteClass) {
 
 $Class* Util::getRemoteClass($Class* cl) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	while (cl != nullptr) {
 		$var($ClassArray, interfaces, cl->getInterfaces());
 		for (int32_t i = interfaces->length - 1; i >= 0; --i) {
@@ -334,6 +337,7 @@ $Class* Util::getRemoteClass($Class* cl) {
 
 $ClassArray* Util::getRemoteInterfaces($Class* remoteClass) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$var($ArrayList, list, $new($ArrayList));
 	getRemoteInterfaces(list, remoteClass);
 	return $fcast($ClassArray, list->toArray($$new($ClassArray, list->size())));
@@ -341,6 +345,7 @@ $ClassArray* Util::getRemoteInterfaces($Class* remoteClass) {
 
 void Util::getRemoteInterfaces($ArrayList* list, $Class* cl) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$Class* superclass = $nc(cl)->getSuperclass();
 	if (superclass != nullptr) {
@@ -364,6 +369,7 @@ void Util::getRemoteInterfaces($ArrayList* list, $Class* cl) {
 
 void Util::checkMethod($Method* m) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$var($ClassArray, ex, $nc(m)->getExceptionTypes());
 	for (int32_t i = 0; i < $nc(ex)->length; ++i) {
 		$load($RemoteException);
@@ -376,6 +382,7 @@ void Util::checkMethod($Method* m) {
 
 $RemoteStub* Util::createStub($Class* remoteClass, $RemoteRef* ref) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, stubname, $str({$($nc(remoteClass)->getName()), "_Stub"_s}));
 	try {
@@ -406,6 +413,7 @@ $RemoteStub* Util::createStub($Class* remoteClass, $RemoteRef* ref) {
 
 $Skeleton* Util::createSkeleton($Remote* object) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$Class* cl = nullptr;
 	try {
@@ -436,6 +444,7 @@ $Skeleton* Util::createSkeleton($Remote* object) {
 
 int64_t Util::computeMethodHash($Method* m) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	int64_t hash = 0;
 	$var($ByteArrayOutputStream, sink, $new($ByteArrayOutputStream, 127));
 	try {
@@ -464,6 +473,7 @@ int64_t Util::computeMethodHash($Method* m) {
 
 $String* Util::getMethodNameAndDescriptor($Method* m) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	$var($StringBuilder, desc, $new($StringBuilder, $($nc(m)->getName())));
 	desc->append(u'(');
 	$var($ClassArray, paramTypes, $nc(m)->getParameterTypes());
@@ -483,6 +493,7 @@ $String* Util::getMethodNameAndDescriptor($Method* m) {
 
 $String* Util::getTypeDescriptor($Class* type) {
 	$init(Util);
+	$useLocalCurrentObjectStackCache();
 	if ($nc(type)->isPrimitive()) {
 		$init($Integer);
 		if (type == $Integer::TYPE) {
@@ -554,6 +565,7 @@ $String* Util::lambda$static$0() {
 }
 
 void clinit$Util($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	Util::logLevel = $LogStream::parseLevel($cast($String, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(Util$$Lambda$lambda$static$0))))));
 	$assignStatic(Util::serverRefLog, $Log::getLog("sun.rmi.server.ref"_s, "transport"_s, Util::logLevel));

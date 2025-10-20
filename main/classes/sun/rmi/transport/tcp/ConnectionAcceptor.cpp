@@ -76,6 +76,7 @@ void ConnectionAcceptor::init$($TCPTransport* transport) {
 }
 
 void ConnectionAcceptor::startNewAcceptor() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, var$0, "TCPChannel Accept-"_s);
 	$var($Thread, t, $cast($Thread, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction, this, $$concat(var$0, $$str(++ConnectionAcceptor::threadNum)), true)))));

@@ -93,6 +93,7 @@ $Registry* LocateRegistry::getRegistry($String* host, int32_t port) {
 }
 
 $Registry* LocateRegistry::getRegistry($String* host$renamed, int32_t port, $RMIClientSocketFactory* csf) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, host, host$renamed);
 	$var($Registry, registry, nullptr);
 	if (port <= 0) {

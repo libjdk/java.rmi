@@ -280,6 +280,7 @@ void Transport::setContextClassLoader($ClassLoader* ccl) {
 }
 
 bool Transport::serviceCall($RemoteCall* call) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	try {
 		$var($Remote, impl, nullptr);
@@ -389,6 +390,7 @@ $String* Transport::lambda$getLogLevel$0() {
 }
 
 void clinit$Transport($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	Transport::logLevel = $LogStream::parseLevel($(Transport::getLogLevel()));
 	$assignStatic(Transport::transportLog, $Log::getLog("sun.rmi.transport.misc"_s, "transport"_s, Transport::logLevel));
 	$assignStatic(Transport::currentTransport$, $new($ThreadLocal));

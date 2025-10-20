@@ -164,6 +164,7 @@ $Integer* RuntimeUtil::lambda$static$0() {
 }
 
 void clinit$RuntimeUtil($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$assignStatic(RuntimeUtil::runtimeLog, $Log::getLog("sun.rmi.runtime"_s, ($String*)nullptr, false));
 	RuntimeUtil::schedulerThreads = $nc(($cast($Integer, $($AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(RuntimeUtil$$Lambda$lambda$static$0)))))))->intValue();

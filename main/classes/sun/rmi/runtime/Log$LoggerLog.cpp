@@ -114,6 +114,7 @@ bool Log$LoggerLog::isLoggable($Level* level) {
 }
 
 void Log$LoggerLog::log($Level* level, $String* message) {
+	$useLocalCurrentObjectStackCache();
 	if (isLoggable(level)) {
 		$var($StackWalker$StackFrame, sourceFrame, $Log::getSource());
 		$var($Level, var$0, level);
@@ -124,6 +125,7 @@ void Log$LoggerLog::log($Level* level, $String* message) {
 }
 
 void Log$LoggerLog::log($Level* level, $String* message, $Throwable* thrown) {
+	$useLocalCurrentObjectStackCache();
 	if (isLoggable(level)) {
 		$var($StackWalker$StackFrame, sourceFrame, $Log::getSource());
 		$var($Level, var$0, level);
@@ -134,6 +136,7 @@ void Log$LoggerLog::log($Level* level, $String* message, $Throwable* thrown) {
 }
 
 $String* Log$LoggerLog::toString() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, var$2, $$str({$($nc($of(this->logger))->toString()), ", level: "_s}));
 	$var($String, var$1, $$concat(var$2, $($nc(this->logger)->getLevel())));
 	$var($String, var$0, $$concat(var$1, ", name: "));

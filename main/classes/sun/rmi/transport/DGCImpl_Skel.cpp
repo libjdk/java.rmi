@@ -93,6 +93,7 @@ $OperationArray* DGCImpl_Skel::getOperations() {
 }
 
 void DGCImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum, int64_t hash) {
+	$useLocalCurrentObjectStackCache();
 	if (hash != DGCImpl_Skel::interfaceHash) {
 		$throwNew($SkeletonMismatchException, "interface hash mismatch"_s);
 	}
@@ -202,6 +203,7 @@ void DGCImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum
 }
 
 void clinit$DGCImpl_Skel($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(DGCImpl_Skel::operations, $new($OperationArray, {
 		$$new($Operation, "void clean(java.rmi.server.ObjID[], long, java.rmi.dgc.VMID, boolean)"_s),
 		$$new($Operation, "java.rmi.dgc.Lease dirty(java.rmi.server.ObjID[], long, java.rmi.dgc.Lease)"_s)

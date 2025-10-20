@@ -179,11 +179,13 @@ bool ObjID::equals(Object$* obj) {
 }
 
 $String* ObjID::toString() {
+	$useLocalCurrentObjectStackCache();
 	return $str({"["_s, ($nc(this->space)->equals(ObjID::mySpace) ? ""_s : $$str({this->space, ", "_s})), $$str(this->objNum), "]"_s});
 }
 
 bool ObjID::useRandomIDs() {
 	$init(ObjID);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, value, $cast($String, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(ObjID$$Lambda$lambda$useRandomIDs$0)))));
 	return value == nullptr ? true : $Boolean::parseBoolean(value);

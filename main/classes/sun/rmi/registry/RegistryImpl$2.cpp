@@ -131,6 +131,7 @@ void RegistryImpl$2::init$($RegistryImpl* this$0, int32_t val$port) {
 }
 
 $Object* RegistryImpl$2::run() {
+	$useLocalCurrentObjectStackCache();
 	$init($RegistryImpl);
 	$var($LiveRef, lref, $new($LiveRef, $RegistryImpl::id, this->val$port));
 	this->this$0->setup($$new($UnicastServerRef, lref, static_cast<$ObjectInputFilter*>($$new(RegistryImpl$2$$Lambda$registryFilter))));
