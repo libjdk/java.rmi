@@ -1,15 +1,6 @@
 #include <java/rmi/server/ServerCloneException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/CloneNotSupportedException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ClassInfo = ::java::lang::ClassInfo;
@@ -77,16 +68,10 @@ $Throwable* ServerCloneException::getCause() {
 ServerCloneException::ServerCloneException() {
 }
 
-ServerCloneException::ServerCloneException(const ServerCloneException& e) {
+ServerCloneException::ServerCloneException(const ServerCloneException& e) : $CloneNotSupportedException(e) {
 }
 
-ServerCloneException ServerCloneException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void ServerCloneException::throwWrapper$() {
-	$pendingException(this);
+void ServerCloneException::throw$() {
 	throw *this;
 }
 

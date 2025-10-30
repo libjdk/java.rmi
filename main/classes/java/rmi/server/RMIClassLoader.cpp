@@ -1,32 +1,17 @@
 #include <java/rmi/server/RMIClassLoader.h>
 
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/CompoundAttribute.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
 #include <java/lang/IllegalAccessError.h>
 #include <java/lang/IllegalAccessException.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InstantiationError.h>
 #include <java/lang/InstantiationException.h>
 #include <java/lang/LinkageError.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NoClassDefFoundError.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/RuntimePermission.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/URL.h>
 #include <java/rmi/server/RMIClassLoader$1.h>
 #include <java/rmi/server/RMIClassLoader$2.h>
@@ -133,9 +118,7 @@ $Object* allocate$RMIClassLoader($Class* clazz) {
 	return $of($alloc(RMIClassLoader));
 }
 
-
 $RMIClassLoaderSpi* RMIClassLoader::defaultProvider = nullptr;
-
 $RMIClassLoaderSpi* RMIClassLoader::provider = nullptr;
 
 void RMIClassLoader::init$() {
@@ -210,17 +193,13 @@ $RMIClassLoaderSpi* RMIClassLoader::initializeProvider() {
 			$Class* providerClass = $Class::forName(providerClassName, false, $($ClassLoader::getSystemClassLoader()))->asSubclass($RMIClassLoaderSpi::class$);
 			$var($RMIClassLoaderSpi, result, $cast($RMIClassLoaderSpi, $nc(providerClass)->newInstance()));
 			return result;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, e, $catch());
+		} catch ($ClassNotFoundException& e) {
 			$throwNew($NoClassDefFoundError, $(e->getMessage()));
-		} catch ($IllegalAccessException&) {
-			$var($IllegalAccessException, e, $catch());
+		} catch ($IllegalAccessException& e) {
 			$throwNew($IllegalAccessError, $(e->getMessage()));
-		} catch ($InstantiationException&) {
-			$var($InstantiationException, e, $catch());
+		} catch ($InstantiationException& e) {
 			$throwNew($InstantiationError, $(e->getMessage()));
-		} catch ($ClassCastException&) {
-			$var($ClassCastException, e, $catch());
+		} catch ($ClassCastException& e) {
 			$var($Error, error, $new($LinkageError, "provider class not assignable to RMIClassLoaderSpi"_s));
 			error->initCause(e);
 			$throw(error);
@@ -231,8 +210,7 @@ $RMIClassLoaderSpi* RMIClassLoader::initializeProvider() {
 	if ($nc(iter)->hasNext()) {
 		try {
 			return $cast($RMIClassLoaderSpi, iter->next());
-		} catch ($ClassCastException&) {
-			$var($ClassCastException, e, $catch());
+		} catch ($ClassCastException& e) {
 			$var($Error, error, $new($LinkageError, "provider class not assignable to RMIClassLoaderSpi"_s));
 			error->initCause(e);
 			$throw(error);

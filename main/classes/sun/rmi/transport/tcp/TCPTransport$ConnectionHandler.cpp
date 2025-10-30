@@ -10,27 +10,14 @@
 #include <java/io/InputStream.h>
 #include <java/io/OutputStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
 #include <java/lang/ThreadLocal.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/SoftReference.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/InetAddress.h>
 #include <java/net/Socket.h>
 #include <java/rmi/server/RMIClientSocketFactory.h>
@@ -233,8 +220,8 @@ void TCPTransport$ConnectionHandler::run() {
 			$init($TCPTransport);
 			t->setName($$str({"RMI TCP Connection("_s, $$str($nc($TCPTransport::connectionCount)->incrementAndGet()), ")-"_s, this->remoteHost}));
 			$AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new(TCPTransport$ConnectionHandler$$Lambda$lambda$run$0, this)), $TCPTransport::NOPERMS_ACC);
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			t->setName(name);
 		}
@@ -251,15 +238,13 @@ void TCPTransport$ConnectionHandler::run0() {
 	$nc($TCPTransport::threadConnectionHandler)->set(this);
 	try {
 		$nc(this->socket)->setTcpNoDelay(true);
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& e) {
 	}
 	try {
 		if ($TCPTransport::connectionReadTimeout > 0) {
 			$nc(this->socket)->setSoTimeout($TCPTransport::connectionReadTimeout);
 		}
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& e) {
 	}
 	{
 		$var($Throwable, var$0, nullptr);
@@ -344,13 +329,12 @@ void TCPTransport$ConnectionHandler::run0() {
 						}
 					}
 				}
-			} catch ($IOException&) {
-				$var($IOException, e, $catch());
+			} catch ($IOException& e) {
 				$init($Log);
 				$nc($TCPTransport::tcpLog)->log($Log::BRIEF, "terminated with exception:"_s, e);
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$8) {
+			$assign(var$0, var$8);
 		} $finally: {
 			$TCPTransport::closeSocket(this->socket);
 		}

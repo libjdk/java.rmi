@@ -1,27 +1,14 @@
 #include <sun/rmi/transport/tcp/TCPTransport$AcceptLoop.h>
 
 #include <java/io/IOException.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NoClassDefFoundError.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/OutOfMemoryError.h>
 #include <java/lang/ReflectiveOperationException.h>
 #include <java/lang/Runnable.h>
 #include <java/lang/SecurityException.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/InvocationTargetException.h>
-#include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/UndeclaredThrowableException.h>
 #include <java/net/InetAddress.h>
 #include <java/net/ServerSocket.h>
@@ -130,8 +117,8 @@ void TCPTransport$AcceptLoop::run() {
 		$var($Throwable, var$0, nullptr);
 		try {
 			executeAcceptLoop();
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			try {
 				$init($TCPTransport);
@@ -140,8 +127,7 @@ void TCPTransport$AcceptLoop::run() {
 					$nc($TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"server socket close: "_s, this->serverSocket}));
 				}
 				$nc(this->serverSocket)->close();
-			} catch ($IOException&) {
-				$var($IOException, e, $catch());
+			} catch ($IOException& e) {
 				$init($TCPTransport);
 				$init($Log);
 				if ($nc($TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
@@ -170,13 +156,11 @@ void TCPTransport$AcceptLoop::executeAcceptLoop() {
 			$var($String, clientHost, clientAddr != nullptr ? $nc(clientAddr)->getHostAddress() : "0.0.0.0"_s);
 			try {
 				$nc($TCPTransport::connectionThreadPool)->execute($$new($TCPTransport$ConnectionHandler, this->this$0, socket, clientHost));
-			} catch ($RejectedExecutionException&) {
-				$var($RejectedExecutionException, e, $catch());
+			} catch ($RejectedExecutionException& e) {
 				$TCPTransport::closeSocket(socket);
 				$nc($TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"rejected connection from "_s, clientHost}));
 			}
-		} catch ($Throwable&) {
-			$var($Throwable, t, $catch());
+		} catch ($Throwable& t) {
 			{
 				$var($Throwable, var$0, nullptr);
 				bool break$1 = false;
@@ -191,11 +175,10 @@ void TCPTransport$AcceptLoop::executeAcceptLoop() {
 						if ($nc($TCPTransport::tcpLog)->isLoggable($Level::WARNING)) {
 							$nc($TCPTransport::tcpLog)->log($Level::WARNING, $$str({"accept loop for "_s, this->serverSocket, " throws"_s}), t);
 						}
-					} catch ($Throwable&) {
-						$catch();
+					} catch ($Throwable& tt) {
 					}
-				} catch ($Throwable&) {
-					$assign(var$0, $catch());
+				} catch ($Throwable& var$2) {
+					$assign(var$0, var$2);
 				} $finally: {
 					if (socket != nullptr) {
 						$TCPTransport::closeSocket(socket);
@@ -211,8 +194,7 @@ void TCPTransport$AcceptLoop::executeAcceptLoop() {
 			if (!($instanceOf($SecurityException, t))) {
 				try {
 					$TCPEndpoint::shedConnectionCaches();
-				} catch ($Throwable&) {
-					$catch();
+				} catch ($Throwable& tt) {
 				}
 			}
 			if ($instanceOf($Exception, t) || $instanceOf($OutOfMemoryError, t) || $instanceOf($NoClassDefFoundError, t)) {
@@ -247,8 +229,7 @@ void TCPTransport$AcceptLoop::throttleLoopOnException() {
 	} else if (++this->recentExceptionCount >= 10) {
 		try {
 			$Thread::sleep(10000);
-		} catch ($InterruptedException&) {
-			$catch();
+		} catch ($InterruptedException& ignore) {
 		}
 	}
 }

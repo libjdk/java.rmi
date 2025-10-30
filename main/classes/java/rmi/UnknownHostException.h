@@ -22,8 +22,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x8EDBC1399086994C;
 	UnknownHostException(const UnknownHostException& e);
-	UnknownHostException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline UnknownHostException* operator ->() {
+		return (UnknownHostException*)throwing$;
+	}
 };
 
 	} // rmi

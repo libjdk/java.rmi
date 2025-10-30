@@ -7,28 +7,14 @@
 #include <java/io/InputStream.h>
 #include <java/io/OutputStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/Runnable.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/SoftReference.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/Socket.h>
 #include <java/rmi/ConnectIOException.h>
 #include <java/rmi/RemoteException.h>
@@ -281,13 +267,9 @@ $Object* allocate$TCPChannel($Class* clazz) {
 	return $of($alloc(TCPChannel));
 }
 
-
 int64_t TCPChannel::idleTimeout = 0;
-
 int32_t TCPChannel::handshakeTimeout = 0;
-
 int32_t TCPChannel::responseTimeout = 0;
-
 $ScheduledExecutorService* TCPChannel::scheduler = nullptr;
 
 void TCPChannel::init$($TCPTransport* tr, $TCPEndpoint* ep) {
@@ -372,8 +354,7 @@ $Connection* TCPChannel::createConnection() {
 			try {
 				originalSoTimeout = $nc(sock)->getSoTimeout();
 				sock->setSoTimeout(TCPChannel::handshakeTimeout);
-			} catch ($Exception&) {
-				$catch();
+			} catch ($Exception& e) {
 			}
 			$var($DataInputStream, in, $new($DataInputStream, $(conn->getInputStream())));
 			int8_t ack = in->readByte();
@@ -395,17 +376,14 @@ $Connection* TCPChannel::createConnection() {
 			}
 			try {
 				$nc(sock)->setSoTimeout((originalSoTimeout != 0 ? originalSoTimeout : TCPChannel::responseTimeout));
-			} catch ($Exception&) {
-				$catch();
+			} catch ($Exception& e) {
 			}
 			out->flush();
 		}
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		try {
 			conn->close();
-		} catch ($Exception&) {
-			$catch();
+		} catch ($Exception& ex) {
 		}
 		if ($instanceOf($RemoteException, e)) {
 			$throw($cast($RemoteException, e));
@@ -443,20 +421,17 @@ void TCPChannel::free($Connection* conn, bool reuse) {
 		$nc($TCPTransport::tcpLog)->log($Log::BRIEF, "close connection"_s);
 		try {
 			conn->close();
-		} catch ($IOException&) {
-			$catch();
+		} catch ($IOException& ignored) {
 		}
 	}
 }
 
 void TCPChannel::writeTransportHeader($DataOutputStream* out) {
-	$useLocalCurrentObjectStackCache();
 	try {
 		$var($DataOutputStream, dataOut, $new($DataOutputStream, out));
 		dataOut->writeInt($TransportConstants::Magic);
 		dataOut->writeShort($TransportConstants::Version);
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		$throwNew($ConnectIOException, "error writing JRMP transport header"_s, e);
 	}
 }
@@ -473,8 +448,7 @@ void TCPChannel::shedCache() {
 		conn->set(i, nullptr);
 		try {
 			$nc(c)->close();
-		} catch ($IOException&) {
-			$catch();
+		} catch ($IOException& e) {
 		}
 	}
 }
@@ -494,8 +468,7 @@ void TCPChannel::freeCachedConnections() {
 					$nc($TCPTransport::tcpLog)->log($Log::VERBOSE, "connection timeout expired"_s);
 					try {
 						conn->close();
-					} catch ($IOException&) {
-						$catch();
+					} catch ($IOException& e) {
 					}
 					iter->remove();
 				}

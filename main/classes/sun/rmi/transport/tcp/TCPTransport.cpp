@@ -7,24 +7,11 @@
 #include <java/io/InputStream.h>
 #include <java/io/OutputStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
 #include <java/lang/ThreadLocal.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
@@ -32,8 +19,6 @@
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/Reference.h>
 #include <java/lang/ref/WeakReference.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/BindException.h>
 #include <java/net/ServerSocket.h>
 #include <java/net/Socket.h>
@@ -375,20 +360,13 @@ $Object* allocate$TCPTransport($Class* clazz) {
 
 bool TCPTransport::$assertionsDisabled = false;
 $Log* TCPTransport::tcpLog = nullptr;
-
 int32_t TCPTransport::maxConnectionThreads = 0;
-
 int64_t TCPTransport::threadKeepAliveTime = 0;
-
 $ExecutorService* TCPTransport::connectionThreadPool = nullptr;
-
 $AtomicInteger* TCPTransport::connectionCount = nullptr;
-
 $ThreadLocal* TCPTransport::threadConnectionHandler = nullptr;
-
 $AccessControlContext* TCPTransport::NOPERMS_ACC = nullptr;
 $RMISocketFactory* TCPTransport::defaultSocketFactory = nullptr;
-
 int32_t TCPTransport::connectionReadTimeout = 0;
 
 void TCPTransport::init$($LinkedList* epList) {
@@ -478,8 +456,8 @@ void TCPTransport::exportObject($Target* target) {
 		try {
 			$Transport::exportObject(target);
 			ok = true;
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			if (!ok) {
 				$synchronized(this) {
@@ -517,8 +495,7 @@ void TCPTransport::decrementExportCount() {
 				$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"server socket close: "_s, ss}));
 			}
 			$nc(ss)->close();
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			if ($nc(TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
 				$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"server socket close throws: "_s, e}));
 			}
@@ -562,11 +539,9 @@ void TCPTransport::listen() {
 			$set(this, server, ep->newServerSocket());
 			$var($Thread, t, $cast($Thread, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($NewThreadAction, $$new($TCPTransport$AcceptLoop, this, this->server), $$str({"TCP Accept-"_s, $$str(port)}), true)))));
 			$nc(t)->start();
-		} catch ($BindException&) {
-			$var($BindException, e, $catch());
+		} catch ($BindException& e) {
 			$throwNew($ExportException, $$str({"Port already in use: "_s, $$str(port)}), e);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($ExportException, $$str({"Listen failed on port: "_s, $$str(port)}), e);
 		}
 	} else {
@@ -586,8 +561,7 @@ void TCPTransport::closeSocket($Socket* sock) {
 			$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"socket close: "_s, sock}));
 		}
 		$nc(sock)->close();
-	} catch ($IOException&) {
-		$var($IOException, ex, $catch());
+	} catch ($IOException& ex) {
 		$init($Log);
 		if ($nc(TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
 			$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"socket close throws: "_s, ex}));
@@ -649,20 +623,18 @@ void TCPTransport::handleMessages($Connection* conn, bool persistent) {
 						}
 					}
 				} while (persistent);
-			} catch ($IOException&) {
-				$var($IOException, e, $catch());
+			} catch ($IOException& e) {
 				$init($Log);
 				if ($nc(TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
 					$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"(port "_s, $$str(port), ") exception: "_s}), e);
 				}
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$2) {
+			$assign(var$0, var$2);
 		} $finally: {
 			try {
 				$nc(conn)->close();
-			} catch ($IOException&) {
-				$var($IOException, ex, $catch());
+			} catch ($IOException& ex) {
 				$init($Log);
 				if ($nc(TCPTransport::tcpLog)->isLoggable($Log::BRIEF)) {
 					$nc(TCPTransport::tcpLog)->log($Log::BRIEF, $$str({"Connection close throws "_s, ex}));

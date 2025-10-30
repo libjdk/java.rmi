@@ -12,30 +12,15 @@
 #include <java/io/IOException.h>
 #include <java/io/InputStream.h>
 #include <java/io/OutputStream.h>
-#include <java/io/PrintStream.h>
 #include <java/io/RandomAccessFile.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessController.h>
 #include <java/security/PrivilegedAction.h>
 #include <sun/rmi/log/LogHandler.h>
@@ -245,7 +230,6 @@ $String* ReliableLog::versionFile = nullptr;
 $String* ReliableLog::newVersionFile = nullptr;
 int32_t ReliableLog::intBytes = 0;
 int64_t ReliableLog::diskPageSize = 0;
-
 $Constructor* ReliableLog::logClassConstructor = nullptr;
 
 void ReliableLog::init$($String* dirPath, $LogHandler* handler, bool pad) {
@@ -278,11 +262,9 @@ void ReliableLog::init$($String* dirPath, $LogHandler* handler, bool pad) {
 	if (this->version == 0) {
 		try {
 			snapshot($($nc(handler)->initialSnapshot()));
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throw(e);
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
+		} catch ($Exception& e) {
 			$throwNew($IOException, $$str({"initial snapshot failed with exception: "_s, e}));
 		}
 	}
@@ -296,7 +278,6 @@ $Object* ReliableLog::recover() {
 	$synchronized(this) {
 		$useLocalCurrentObjectStackCache();
 		if (this->Debug) {
-			$init($System);
 			$nc($System::err)->println("log.debug: recover()"_s);
 		}
 		if (this->version == 0) {
@@ -307,7 +288,6 @@ $Object* ReliableLog::recover() {
 		$var($File, snapshotFile, $new($File, fname));
 		$var($InputStream, in, $new($BufferedInputStream, $$new($FileInputStream, snapshotFile)));
 		if (this->Debug) {
-			$init($System);
 			$nc($System::err)->println($$str({"log.debug: recovering from "_s, fname}));
 		}
 		{
@@ -315,20 +295,17 @@ $Object* ReliableLog::recover() {
 			try {
 				try {
 					$assign(snapshot, $nc(this->handler)->recover(in));
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throw(e);
-				} catch ($Exception&) {
-					$var($Exception, e, $catch());
+				} catch ($Exception& e) {
 					if (this->Debug) {
-						$init($System);
 						$nc($System::err)->println($$str({"log.debug: recovery failed: "_s, e}));
 					}
 					$throwNew($IOException, $$str({"log recover failed with exception: "_s, e}));
 				}
 				this->snapshotBytes = snapshotFile->length();
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				in->close();
 			}
@@ -357,11 +334,9 @@ void ReliableLog::update(Object$* value, bool forceToDisk) {
 		writeInt(this->log, spansBoundary ? 1 << 31 : 0);
 		try {
 			$nc(this->handler)->writeUpdate($$new($LogOutputStream, this->log), value);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throw(e);
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
+		} catch ($Exception& e) {
 			$throw($cast($IOException, $($$new($IOException, "write update failed"_s)->initCause(e))));
 		}
 		$nc(this->log)->sync();
@@ -395,14 +370,11 @@ $Constructor* ReliableLog::getLogClassConstructor() {
 			$var($ClassLoader, loader, $cast($ClassLoader, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($ReliableLog$1)))));
 			$load($ReliableLog$LogFile);
 			$Class* cl = $nc($nc(loader)->loadClass(logClassName))->asSubclass($ReliableLog$LogFile::class$);
-				$load($String);
 			return $nc(cl)->getConstructor($$new($ClassArray, {
 				$String::class$,
 				$String::class$
 			}));
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
-			$init($System);
+		} catch ($Exception& e) {
 			$nc($System::err)->println("Exception occurred:"_s);
 			e->printStackTrace();
 		}
@@ -423,16 +395,14 @@ void ReliableLog::snapshot(Object$* value) {
 			try {
 				try {
 					$nc(this->handler)->snapshot(out, value);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throw(e);
-				} catch ($Exception&) {
-					$var($Exception, e, $catch());
+				} catch ($Exception& e) {
 					$throwNew($IOException, "snapshot failed"_s, e);
 				}
 				this->lastSnapshot = $System::currentTimeMillis();
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				out->close();
 				this->snapshotBytes = snapshotFile->length();
@@ -458,8 +428,8 @@ void ReliableLog::close() {
 			$var($Throwable, var$0, nullptr);
 			try {
 				$nc(this->log)->close();
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				$set(this, log, nullptr);
 			}
@@ -539,8 +509,7 @@ void ReliableLog::openLogFile(bool truncate) {
 	$beforeCallerSensitive();
 	try {
 		close();
-	} catch ($IOException&) {
-		$catch();
+	} catch ($IOException& e) {
 	}
 	$set(this, logName, versionName(ReliableLog::logfilePrefix));
 	try {
@@ -548,8 +517,7 @@ void ReliableLog::openLogFile(bool truncate) {
 			$of(this->logName),
 			$of("rw"_s)
 		}))));
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throw($cast($IOException, $($$new($IOException, "unable to construct LogFile instance"_s)->initCause(e))));
 	}
 	if (truncate) {
@@ -587,18 +555,16 @@ void ReliableLog::writeVersionFile(bool newVersion) {
 						try {
 							try {
 								writeInt(out, this->version);
-							} catch ($Throwable&) {
-								$var($Throwable, t$, $catch());
+							} catch ($Throwable& t$) {
 								try {
 									out->close();
-								} catch ($Throwable&) {
-									$var($Throwable, x2, $catch());
+								} catch ($Throwable& x2) {
 									t$->addSuppressed(x2);
 								}
 								$throw(t$);
 							}
-						} catch ($Throwable&) {
-							$assign(var$1, $catch());
+						} catch ($Throwable& var$2) {
+							$assign(var$1, var$2);
 						} /*finally*/ {
 							out->close();
 						}
@@ -606,18 +572,16 @@ void ReliableLog::writeVersionFile(bool newVersion) {
 							$throw(var$1);
 						}
 					}
-				} catch ($Throwable&) {
-					$var($Throwable, t$, $catch());
+				} catch ($Throwable& t$) {
 					try {
 						fos->close();
-					} catch ($Throwable&) {
-						$var($Throwable, x2, $catch());
+					} catch ($Throwable& x2) {
 						t$->addSuppressed(x2);
 					}
 					$throw(t$);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$3) {
+				$assign(var$0, var$3);
 			} /*finally*/ {
 				fos->close();
 			}
@@ -651,18 +615,16 @@ int32_t ReliableLog::readVersion($String* name) {
 					var$2 = in->readInt();
 					return$1 = true;
 					goto $finally;
-				} catch ($Throwable&) {
-					$var($Throwable, t$, $catch());
+				} catch ($Throwable& t$) {
 					try {
 						in->close();
-					} catch ($Throwable&) {
-						$var($Throwable, x2, $catch());
+					} catch ($Throwable& x2) {
 						t$->addSuppressed(x2);
 					}
 					$throw(t$);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$3) {
+				$assign(var$0, var$3);
 			} $finally: {
 				in->close();
 			}
@@ -682,17 +644,14 @@ void ReliableLog::getVersion() {
 	try {
 		this->version = readVersion($(fName(ReliableLog::newVersionFile)));
 		commitToNewVersion();
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		try {
 			deleteNewVersionFile();
-		} catch ($IOException&) {
-			$catch();
+		} catch ($IOException& ex) {
 		}
 		try {
 			this->version = readVersion($(fName(ReliableLog::versionFile)));
-		} catch ($IOException&) {
-			$var($IOException, ex, $catch());
+		} catch ($IOException& ex) {
 			createFirstVersion();
 		}
 	}
@@ -710,7 +669,6 @@ $Object* ReliableLog::recoverUpdates(Object$* state$renamed) {
 	$var($InputStream, in, $new($BufferedInputStream, $$new($FileInputStream, fname)));
 	$var($DataInputStream, dataIn, $new($DataInputStream, in));
 	if (this->Debug) {
-		$init($System);
 		$nc($System::err)->println($$str({"log.debug: reading updates from "_s, fname}));
 	}
 	try {
@@ -718,14 +676,12 @@ $Object* ReliableLog::recoverUpdates(Object$* state$renamed) {
 		this->logBytes += ReliableLog::intBytes;
 		this->minorFormatVersion = dataIn->readInt();
 		this->logBytes += ReliableLog::intBytes;
-	} catch ($EOFException&) {
-		$var($EOFException, e, $catch());
+	} catch ($EOFException& e) {
 		openLogFile(true);
 		$assign(in, nullptr);
 	}
 	if (this->majorFormatVersion != ReliableLog::PreferredMajorVersion) {
 		if (this->Debug) {
-			$init($System);
 			$nc($System::err)->println($$str({"log.debug: major version mismatch: "_s, $$str(this->majorFormatVersion), "."_s, $$str(this->minorFormatVersion)}));
 		}
 		$throwNew($IOException, $$str({"Log file "_s, this->logName, " has a version "_s, $$str(this->majorFormatVersion), "."_s, $$str(this->minorFormatVersion), " format, and this implementation  understands only version "_s, $$str(ReliableLog::PreferredMajorVersion), "."_s, $$str(ReliableLog::PreferredMinorVersion)}));
@@ -737,47 +693,40 @@ $Object* ReliableLog::recoverUpdates(Object$* state$renamed) {
 				int32_t updateLen = 0;
 				try {
 					updateLen = dataIn->readInt();
-				} catch ($EOFException&) {
-					$var($EOFException, e, $catch());
+				} catch ($EOFException& e) {
 					if (this->Debug) {
-						$init($System);
 						$nc($System::err)->println("log.debug: log was sync\'d cleanly"_s);
 					}
 					break;
 				}
 				if (updateLen <= 0) {
 					if (this->Debug) {
-						$init($System);
 						$nc($System::err)->println($$str({"log.debug: last update incomplete, updateLen = 0x"_s, $($Integer::toHexString(updateLen))}));
 					}
 					break;
 				}
 				if (in->available() < updateLen) {
 					if (this->Debug) {
-						$init($System);
 						$nc($System::err)->println("log.debug: log was truncated"_s);
 					}
 					break;
 				}
 				if (this->Debug) {
-					$init($System);
 					$nc($System::err)->println($$str({"log.debug: rdUpdate size "_s, $$str(updateLen)}));
 				}
 				try {
 					$assign(state, $nc(this->handler)->readUpdate($$new($LogInputStream, in, updateLen), state));
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throw(e);
-				} catch ($Exception&) {
-					$var($Exception, e, $catch());
+				} catch ($Exception& e) {
 					e->printStackTrace();
 					$throwNew($IOException, $$str({"read update failed with exception: "_s, e}));
 				}
 				this->logBytes += (ReliableLog::intBytes + updateLen);
 				++this->logEntries;
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			if (in != nullptr) {
 				in->close();
@@ -788,7 +737,6 @@ $Object* ReliableLog::recoverUpdates(Object$* state$renamed) {
 		}
 	}
 	if (this->Debug) {
-		$init($System);
 		$nc($System::err)->println($$str({"log.debug: recovered updates: "_s, $$str(this->logEntries)}));
 	}
 	openLogFile(false);

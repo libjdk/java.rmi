@@ -3,19 +3,7 @@
 #include <java/io/ByteArrayOutputStream.h>
 #include <java/io/FilterOutputStream.h>
 #include <java/io/OutputStream.h>
-#include <java/io/PrintStream.h>
-#include <java/lang/Array.h>
 #include <java/lang/ArrayIndexOutOfBoundsException.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/Level.h>
 #include <java/util/logging/Logger.h>
 #include <sun/rmi/runtime/Log.h>
@@ -100,8 +88,8 @@ void Log$LoggerPrintStream::write(int32_t b) {
 				$var($String, message, $concat(var$1, $($nc(this->bufOut)->toString())));
 				$init($Level);
 				$nc(this->logger)->logp($Level::INFO, "LogStream"_s, "print"_s, message);
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$2) {
+				$assign(var$0, var$2);
 			} /*finally*/ {
 				$nc(this->bufOut)->reset();
 			}

@@ -1,17 +1,9 @@
 #include <sun/rmi/transport/ObjectTable$Reaper.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
 #include <java/lang/ref/Reference.h>
 #include <java/lang/ref/ReferenceQueue.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/Map.h>
 #include <sun/rmi/transport/ObjectTable.h>
 #include <sun/rmi/transport/Target.h>
@@ -87,8 +79,7 @@ void ObjectTable$Reaper::run() {
 				}
 			}
 		} while (!$Thread::interrupted());
-	} catch ($InterruptedException&) {
-		$catch();
+	} catch ($InterruptedException& e) {
 	}
 }
 

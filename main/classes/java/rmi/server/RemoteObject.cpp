@@ -4,20 +4,11 @@
 #include <java/io/ObjectInputStream.h>
 #include <java/io/ObjectOutput.h>
 #include <java/io/ObjectOutputStream.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
 #include <java/lang/IllegalAccessException.h>
 #include <java/lang/InstantiationException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/InvocationHandler.h>
-#include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/Proxy.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/Remote.h>
@@ -177,14 +168,11 @@ void RemoteObject::readObject($ObjectInputStream* in) {
 		try {
 			$var($Object, tmp, $nc(refClass)->newInstance());
 			$set(this, ref, $cast($RemoteRef, tmp));
-		} catch ($InstantiationException&) {
-			$var($Exception, e, $catch());
+		} catch ($InstantiationException& e) {
 			$throwNew($ClassNotFoundException, internalRefClassName, e);
-		} catch ($IllegalAccessException&) {
-			$var($Exception, e, $catch());
+		} catch ($IllegalAccessException& e) {
 			$throwNew($ClassNotFoundException, internalRefClassName, e);
-		} catch ($ClassCastException&) {
-			$var($Exception, e, $catch());
+		} catch ($ClassCastException& e) {
 			$throwNew($ClassNotFoundException, internalRefClassName, e);
 		}
 		$nc(this->ref)->readExternal(in);

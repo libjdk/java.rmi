@@ -1,14 +1,5 @@
 #include <java/rmi/ServerException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -56,16 +47,10 @@ void ServerException::init$($String* s, $Exception* ex) {
 ServerException::ServerException() {
 }
 
-ServerException::ServerException(const ServerException& e) {
+ServerException::ServerException(const ServerException& e) : $RemoteException(e) {
 }
 
-ServerException ServerException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void ServerException::throwWrapper$() {
-	$pendingException(this);
+void ServerException::throw$() {
 	throw *this;
 }
 

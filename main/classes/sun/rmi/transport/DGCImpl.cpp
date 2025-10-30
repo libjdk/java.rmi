@@ -5,23 +5,12 @@
 #include <java/io/ObjectInputFilter$Status.h>
 #include <java/io/ObjectInputFilter.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/dgc/Lease.h>
 #include <java/rmi/dgc/VMID.h>
 #include <java/rmi/server/LogStream.h>
@@ -313,21 +302,13 @@ $Object* allocate$DGCImpl($Class* clazz) {
 }
 
 $Log* DGCImpl::dgcLog = nullptr;
-
 int64_t DGCImpl::leaseValue = 0;
-
 int64_t DGCImpl::leaseCheckInterval = 0;
-
 $ScheduledExecutorService* DGCImpl::scheduler = nullptr;
-
 DGCImpl* DGCImpl::dgc = nullptr;
-
 $String* DGCImpl::DGC_FILTER_PROPNAME = nullptr;
-
 int32_t DGCImpl::DGC_MAX_DEPTH = 0;
-
 int32_t DGCImpl::DGC_MAX_ARRAY_SIZE = 0;
-
 $ObjectInputFilter* DGCImpl::dgcFilter = nullptr;
 
 DGCImpl* DGCImpl::getDGCImpl() {
@@ -373,8 +354,7 @@ $Lease* DGCImpl::dirty($ObjIDArray* ids, int64_t sequenceNum, $Lease* lease$rena
 			$var($String, clientHost, nullptr);
 			try {
 				$assign(clientHost, $RemoteServer::getClientHost());
-			} catch ($ServerNotActiveException&) {
-				$var($ServerNotActiveException, e, $catch());
+			} catch ($ServerNotActiveException& e) {
 				$assign(clientHost, "<unknown host>"_s);
 			}
 			$nc(DGCImpl::dgcLog)->log($Log::BRIEF, $$str({" assigning vmid "_s, vmid, " to client "_s, clientHost}));

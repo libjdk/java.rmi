@@ -1,13 +1,5 @@
 #include <java/rmi/AlreadyBoundException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ClassInfo = ::java::lang::ClassInfo;
@@ -53,16 +45,10 @@ void AlreadyBoundException::init$($String* s) {
 AlreadyBoundException::AlreadyBoundException() {
 }
 
-AlreadyBoundException::AlreadyBoundException(const AlreadyBoundException& e) {
+AlreadyBoundException::AlreadyBoundException(const AlreadyBoundException& e) : $Exception(e) {
 }
 
-AlreadyBoundException AlreadyBoundException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void AlreadyBoundException::throwWrapper$() {
-	$pendingException(this);
+void AlreadyBoundException::throw$() {
 	throw *this;
 }
 

@@ -2,16 +2,6 @@
 
 #include <java/io/FilterOutputStream.h>
 #include <java/io/OutputStream.h>
-#include <java/io/PrintStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/EnclosingMethodInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/Handler.h>
 #include <java/util/logging/Level.h>
 #include <sun/rmi/runtime/Log$InternalStreamHandler.h>
@@ -77,7 +67,6 @@ void Log$LoggerLog$1::init$() {
 }
 
 $Object* Log$LoggerLog$1::run() {
-	$init($System);
 	$var($Log$InternalStreamHandler, alternate, $new($Log$InternalStreamHandler, $System::err));
 	$init($Level);
 	alternate->setLevel($Level::ALL);

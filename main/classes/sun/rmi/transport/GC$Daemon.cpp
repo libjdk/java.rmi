@@ -1,15 +1,6 @@
 #include <sun/rmi/transport/GC$Daemon.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessController.h>
 #include <java/security/PrivilegedAction.h>
 #include <sun/rmi/transport/GC$Daemon$1.h>
@@ -67,7 +58,6 @@ void GC$Daemon::init$() {
 }
 
 void GC$Daemon::run() {
-	$useLocalCurrentObjectStackCache();
 	for (;;) {
 		int64_t l = 0;
 		$init($GC);
@@ -84,8 +74,7 @@ void GC$Daemon::run() {
 			}
 			try {
 				$nc($of($GC::lock))->wait(l - d);
-			} catch ($InterruptedException&) {
-				$var($InterruptedException, x, $catch());
+			} catch ($InterruptedException& x) {
 				continue;
 			}
 		}

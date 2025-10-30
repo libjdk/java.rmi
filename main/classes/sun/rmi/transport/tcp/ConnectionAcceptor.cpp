@@ -1,15 +1,7 @@
 #include <sun/rmi/transport/tcp/ConnectionAcceptor.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessController.h>
 #include <java/security/PrivilegedAction.h>
 #include <java/util/AbstractList.h>
@@ -67,7 +59,6 @@ $Object* allocate$ConnectionAcceptor($Class* clazz) {
 	return $of($alloc(ConnectionAcceptor));
 }
 
-
 int32_t ConnectionAcceptor::threadNum = 0;
 
 void ConnectionAcceptor::init$($TCPTransport* transport) {
@@ -96,8 +87,7 @@ void ConnectionAcceptor::run() {
 		while ($nc(this->queue)->size() == 0) {
 			try {
 				$nc($of(this->queue))->wait();
-			} catch ($InterruptedException&) {
-				$catch();
+			} catch ($InterruptedException& e) {
 			}
 		}
 		startNewAcceptor();

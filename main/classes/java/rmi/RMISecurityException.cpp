@@ -1,14 +1,6 @@
 #include <java/rmi/RMISecurityException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/SecurityException.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ClassInfo = ::java::lang::ClassInfo;
@@ -19,6 +11,7 @@ using $SecurityException = ::java::lang::SecurityException;
 
 namespace java {
 	namespace rmi {
+
 $CompoundAttribute _RMISecurityException_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -33,7 +26,6 @@ $CompoundAttribute _RMISecurityException_MethodAnnotations_init$1[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $FieldInfo _RMISecurityException_FieldInfo_[] = {
 	{"serialVersionUID", "J", nullptr, $PRIVATE | $STATIC | $FINAL, $constField(RMISecurityException, serialVersionUID)},
@@ -74,16 +66,10 @@ void RMISecurityException::init$($String* name, $String* arg) {
 RMISecurityException::RMISecurityException() {
 }
 
-RMISecurityException::RMISecurityException(const RMISecurityException& e) {
+RMISecurityException::RMISecurityException(const RMISecurityException& e) : $SecurityException(e) {
 }
 
-RMISecurityException RMISecurityException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void RMISecurityException::throwWrapper$() {
-	$pendingException(this);
+void RMISecurityException::throw$() {
 	throw *this;
 }
 

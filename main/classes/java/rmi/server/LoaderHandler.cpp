@@ -1,14 +1,6 @@
 #include <java/rmi/server/LoaderHandler.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/URL.h>
 #include <jcpp.h>
 
@@ -22,6 +14,7 @@ using $URL = ::java::net::URL;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _LoaderHandler_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -41,7 +34,6 @@ $CompoundAttribute _LoaderHandler_MethodAnnotations_loadClass2[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $FieldInfo _LoaderHandler_FieldInfo_[] = {
 	{"packagePrefix", "Ljava/lang/String;", nullptr, $PUBLIC | $STATIC | $FINAL, $staticField(LoaderHandler, packagePrefix)},
@@ -71,7 +63,6 @@ $ClassInfo _LoaderHandler_ClassInfo_ = {
 $Object* allocate$LoaderHandler($Class* clazz) {
 	return $of($alloc(LoaderHandler));
 }
-
 
 $String* LoaderHandler::packagePrefix = nullptr;
 

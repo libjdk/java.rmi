@@ -3,15 +3,6 @@
 #include <java/io/IOException.h>
 #include <java/io/ObjectInputFilter.h>
 #include <java/io/ObjectInputStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/RemoteException.h>
 #include <java/rmi/server/RMIClientSocketFactory.h>
@@ -128,13 +119,11 @@ void UnicastRemoteObject::readObject($ObjectInputStream* in) {
 }
 
 $Object* UnicastRemoteObject::clone() {
-	$useLocalCurrentObjectStackCache();
 	try {
 		$var(UnicastRemoteObject, cloned, $cast(UnicastRemoteObject, $RemoteServer::clone()));
 		$nc(cloned)->reexport();
 		return $of(cloned);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throwNew($ServerCloneException, "Clone failed"_s, e);
 	}
 	$shouldNotReachHere();

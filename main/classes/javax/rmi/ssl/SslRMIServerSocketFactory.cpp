@@ -1,19 +1,5 @@
 #include <javax/rmi/ssl/SslRMIServerSocketFactory.h>
 
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/ServerSocket.h>
 #include <java/net/Socket.h>
 #include <java/util/Arrays.h>
@@ -122,8 +108,7 @@ void SslRMIServerSocketFactory::init$($SSLContext* context, $StringArray* enable
 	if (this->enabledCipherSuites != nullptr || this->enabledProtocols != nullptr) {
 		try {
 			$assign(sslSocket, $cast($SSLSocket, $nc(sslSocketFactory)->createSocket()));
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
+		} catch ($Exception& e) {
 			$var($String, msg, "Unable to check if the cipher suites and protocols to enable are supported"_s);
 			$throw($cast($IllegalArgumentException, $($$new($IllegalArgumentException, msg)->initCause(e))));
 		}

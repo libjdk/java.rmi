@@ -5,33 +5,13 @@
 #include <java/io/ObjectInputStream.h>
 #include <java/io/ObjectOutput.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Byte.h>
-#include <java/lang/Character.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Double.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/Float.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
-#include <java/lang/Short.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/Remote.h>
@@ -192,9 +172,7 @@ $Object* allocate$UnicastRef($Class* clazz) {
 	return $of($alloc(UnicastRef));
 }
 
-
 $Log* UnicastRef::clientRefLog = nullptr;
-
 $Log* UnicastRef::clientCallLog = nullptr;
 
 void UnicastRef::init$() {
@@ -238,8 +216,7 @@ $Object* UnicastRef::invoke($Remote* obj, $Method* method, $ObjectArray* params,
 					for (int32_t i = 0; i < $nc(types)->length; ++i) {
 						marshalValue(types->get(i), $nc(params)->get(i), out);
 					}
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "IOException marshalling arguments: "_s, e);
 					$throwNew($MarshalException, "error marshalling arguments"_s, e);
 				}
@@ -265,24 +242,21 @@ $Object* UnicastRef::invoke($Remote* obj, $Method* method, $ObjectArray* params,
 							$assign(var$5, returnValue);
 							return$4 = true;
 							goto $finally1;
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(($cast($StreamRemoteCall, call)))->discardPendingRefs();
 							$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, $$str({$($of(e)->getClass()->getName()), " unmarshalling return: "_s}), e);
 							$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(($cast($StreamRemoteCall, call)))->discardPendingRefs();
 							$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, $$str({$($of(e)->getClass()->getName()), " unmarshalling return: "_s}), e);
 							$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$3, $catch());
+					} catch ($Throwable& var$6) {
+						$assign(var$3, var$6);
 					} $finally1: {
 						try {
 							call->done();
-						} catch ($IOException&) {
-							$var($IOException, e, $catch());
+						} catch ($IOException& e) {
 							reuse = false;
 						}
 					}
@@ -295,23 +269,20 @@ $Object* UnicastRef::invoke($Remote* obj, $Method* method, $ObjectArray* params,
 						goto $finally;
 					}
 				}
-			} catch ($RuntimeException&) {
-				$var($RuntimeException, e, $catch());
+			} catch ($RuntimeException& e) {
 				if ((call == nullptr) || (!$equals($nc(($cast($StreamRemoteCall, call)))->getServerException(), e))) {
 					reuse = false;
 				}
 				$throw(e);
-			} catch ($RemoteException&) {
-				$var($RemoteException, e, $catch());
+			} catch ($RemoteException& e) {
 				reuse = false;
 				$throw(e);
-			} catch ($Error&) {
-				$var($Error, e, $catch());
+			} catch ($Error& e) {
 				reuse = false;
 				$throw(e);
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$7) {
+			$assign(var$0, var$7);
 		} $finally: {
 			if (!alreadyFreed) {
 				if ($nc(UnicastRef::clientRefLog)->isLoggable($Log::BRIEF)) {
@@ -427,13 +398,10 @@ $Object* UnicastRef::unmarshalValue($Class* type, $ObjectInput* in) {
 				}
 			}
 		}
+	} else if (type == $String::class$ && $instanceOf($ObjectInputStream, in)) {
+		return $of($nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString($cast($ObjectInputStream, in)));
 	} else {
-		$load($String);
-		if (type == $String::class$ && $instanceOf($ObjectInputStream, in)) {
-			return $of($nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString($cast($ObjectInputStream, in)));
-		} else {
-			return $of($nc(in)->readObject());
-		}
+		return $of($nc(in)->readObject());
 	}
 }
 
@@ -450,13 +418,11 @@ $RemoteCall* UnicastRef::newCall($RemoteObject* obj, $OperationArray* ops, int32
 		$var($RemoteCall, call, $new($StreamRemoteCall, conn, $($nc(this->ref)->getObjID()), opnum, hash));
 		try {
 			marshalCustomCallData($(call->getOutputStream()));
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshaling custom call data"_s);
 		}
 		return call;
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$nc($($nc(this->ref)->getChannel()))->free(conn, false);
 		$throw(e);
 	}
@@ -464,31 +430,26 @@ $RemoteCall* UnicastRef::newCall($RemoteObject* obj, $OperationArray* ops, int32
 }
 
 void UnicastRef::invoke($RemoteCall* call) {
-	$useLocalCurrentObjectStackCache();
 	try {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::VERBOSE, "execute call"_s);
 		$nc(call)->executeCall();
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "exception: "_s, e);
 		free(call, false);
 		$throw(e);
-	} catch ($Error&) {
-		$var($Error, e, $catch());
+	} catch ($Error& e) {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "error: "_s, e);
 		free(call, false);
 		$throw(e);
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "exception: "_s, e);
 		free(call, false);
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$init($Log);
 		$nc(UnicastRef::clientRefLog)->log($Log::BRIEF, "exception: "_s, e);
 		free(call, true);
@@ -508,8 +469,7 @@ void UnicastRef::done($RemoteCall* call) {
 	free(call, true);
 	try {
 		$nc(call)->done();
-	} catch ($IOException&) {
-		$catch();
+	} catch ($IOException& e) {
 	}
 }
 

@@ -4,28 +4,13 @@
 #include <java/io/FilePermission.h>
 #include <java/io/IOException.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
 #include <java/lang/IllegalAccessError.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/ReflectiveOperationException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/RuntimePermission.h>
 #include <java/lang/SecurityException.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/StringBuilder.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
@@ -34,8 +19,6 @@
 #include <java/lang/ref/Reference.h>
 #include <java/lang/ref/ReferenceQueue.h>
 #include <java/lang/ref/SoftReference.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/Modifier.h>
 #include <java/lang/reflect/Proxy.h>
 #include <java/net/JarURLConnection.h>
@@ -282,20 +265,13 @@ $Object* allocate$LoaderHandler($Class* clazz) {
 	return $of($alloc(LoaderHandler));
 }
 
-
 int32_t LoaderHandler::logLevel = 0;
 $Log* LoaderHandler::loaderLog = nullptr;
-
 $String* LoaderHandler::codebaseProperty = nullptr;
-
 $URLArray* LoaderHandler::codebaseURLs = nullptr;
-
 $Map* LoaderHandler::codebaseLoaders = nullptr;
-
 $HashMap* LoaderHandler::loaderTable = nullptr;
-
 $ReferenceQueue* LoaderHandler::refQueue = nullptr;
-
 $Map* LoaderHandler::pathToURLsCache = nullptr;
 
 void LoaderHandler::init$() {
@@ -337,8 +313,7 @@ $Class* LoaderHandler::loadClass($String* codebase, $String* name, $ClassLoader*
 				$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"class \""_s, name, "\" found via defaultLoader, defined by "_s, $($nc(c)->getClassLoader())}));
 			}
 			return c;
-		} catch ($ClassNotFoundException&) {
-			$catch();
+		} catch ($ClassNotFoundException& e) {
 		}
 	}
 	return loadClass(urls, name);
@@ -385,10 +360,8 @@ $String* LoaderHandler::getClassAnnotation($Class* cl) {
 				}
 				$assign(annotation, urlsToPath(urls));
 			}
-		} catch ($SecurityException&) {
-			$var($Exception, e, $catch());
-		} catch ($IOException&) {
-			$var($Exception, e, $catch());
+		} catch ($SecurityException& e) {
+		} catch ($IOException& e) {
 		}
 	}
 	if (annotation != nullptr) {
@@ -454,8 +427,7 @@ $Class* LoaderHandler::loadClass($URLArray* urls, $String* name) {
 				$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"class \""_s, name, "\" found via thread context class loader (no security manager: codebase disabled), defined by "_s, $($nc(c)->getClassLoader())}));
 			}
 			return c;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, e, $catch());
+		} catch ($ClassNotFoundException& e) {
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, $$str({"class \""_s, name, "\" not found via thread context class loader (no security manager: codebase disabled)"_s}), e);
 			}
@@ -468,16 +440,14 @@ $Class* LoaderHandler::loadClass($URLArray* urls, $String* name) {
 		if (loader != nullptr) {
 			loader->checkPermissions();
 		}
-	} catch ($SecurityException&) {
-		$var($SecurityException, e, $catch());
+	} catch ($SecurityException& e) {
 		try {
 			$Class* c = loadClassForName(name, false, parent);
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::VERBOSE)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"class \""_s, name, "\" found via thread context class loader (access to codebase denied), defined by "_s, $($nc(c)->getClassLoader())}));
 			}
 			return c;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, unimportant, $catch());
+		} catch ($ClassNotFoundException& unimportant) {
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, $$str({"class \""_s, name, "\" not found via thread context class loader (access to codebase denied)"_s}), e);
 			}
@@ -490,8 +460,7 @@ $Class* LoaderHandler::loadClass($URLArray* urls, $String* name) {
 			$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"class \""_s, name, "\" found via codebase, defined by "_s, $($nc(c)->getClassLoader())}));
 		}
 		return c;
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, e, $catch());
+	} catch ($ClassNotFoundException& e) {
 		if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 			$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, $$str({"class \""_s, name, "\" not found via codebase"_s}), e);
 		}
@@ -527,8 +496,7 @@ $Class* LoaderHandler::loadProxyClass($String* codebase, $StringArray* interface
 				$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"(no security manager: codebase disabled) proxy class defined by "_s, $($nc(c)->getClassLoader())}));
 			}
 			return c;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, e, $catch());
+		} catch ($ClassNotFoundException& e) {
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, "(no security manager: codebase disabled) proxy class resolution failed"_s, e);
 			}
@@ -541,16 +509,14 @@ $Class* LoaderHandler::loadProxyClass($String* codebase, $StringArray* interface
 		if (loader != nullptr) {
 			loader->checkPermissions();
 		}
-	} catch ($SecurityException&) {
-		$var($SecurityException, e, $catch());
+	} catch ($SecurityException& e) {
 		try {
 			$Class* c = loadProxyClass(interfaces, defaultLoader, parent, false);
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::VERBOSE)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"(access to codebase denied) proxy class defined by "_s, $($nc(c)->getClassLoader())}));
 			}
 			return c;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, unimportant, $catch());
+		} catch ($ClassNotFoundException& unimportant) {
 			if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 				$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, "(access to codebase denied) proxy class resolution failed"_s, e);
 			}
@@ -563,8 +529,7 @@ $Class* LoaderHandler::loadProxyClass($String* codebase, $StringArray* interface
 			$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"proxy class defined by "_s, $($nc(c)->getClassLoader())}));
 		}
 		return c;
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, e, $catch());
+	} catch ($ClassNotFoundException& e) {
 		if ($nc(LoaderHandler::loaderLog)->isLoggable($Log::BRIEF)) {
 			$nc(LoaderHandler::loaderLog)->log($Log::BRIEF, "proxy class resolution failed"_s, e);
 		}
@@ -593,8 +558,7 @@ $Class* LoaderHandler::loadProxyClass($StringArray* interfaceNames, $ClassLoader
 					}
 					$nc(LoaderHandler::loaderLog)->log($Log::VERBOSE, $$str({"proxy interfaces found via defaultLoader, defined by "_s, $($Arrays::asList(definingLoaders))}));
 				}
-			} catch ($ClassNotFoundException&) {
-				$var($ClassNotFoundException, e, $catch());
+			} catch ($ClassNotFoundException& e) {
 				defaultLoaderCase$break = true;
 				break;
 			}
@@ -602,8 +566,7 @@ $Class* LoaderHandler::loadProxyClass($StringArray* interfaceNames, $ClassLoader
 				if (preferCodebase) {
 					try {
 						return $Proxy::getProxyClass(codebaseLoader, classObjs);
-					} catch ($IllegalArgumentException&) {
-						$catch();
+					} catch ($IllegalArgumentException& e) {
 					}
 				}
 				$assign(proxyLoader, defaultLoader);
@@ -633,8 +596,7 @@ $Class* LoaderHandler::loadProxyClass($ClassLoader* loader, $ClassArray* interfa
 	$beforeCallerSensitive();
 	try {
 		return $Proxy::getProxyClass(loader, interfaces);
-	} catch ($IllegalArgumentException&) {
-		$var($IllegalArgumentException, e, $catch());
+	} catch ($IllegalArgumentException& e) {
 		$throwNew($ClassNotFoundException, "error creating dynamic proxy class"_s, e);
 	}
 	$shouldNotReachHere();
@@ -799,8 +761,7 @@ void LoaderHandler::addPermissionsForURLs($URLArray* urls, $PermissionCollection
 					}
 				}
 			}
-		} catch ($IOException&) {
-			$catch();
+		} catch ($IOException& e) {
 		}
 	}
 }

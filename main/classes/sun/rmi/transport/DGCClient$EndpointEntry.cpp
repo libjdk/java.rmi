@@ -1,26 +1,12 @@
 #include <sun/rmi/transport/DGCClient$EndpointEntry.h>
 
 #include <java/io/InvalidClassException.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Long.h>
 #include <java/lang/Math.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/ref/Reference.h>
 #include <java/lang/ref/ReferenceQueue.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/RemoteException.h>
 #include <java/rmi/UnmarshalException.h>
@@ -182,9 +168,7 @@ $Object* allocate$DGCClient$EndpointEntry($Class* clazz) {
 }
 
 bool DGCClient$EndpointEntry::$assertionsDisabled = false;
-
 $Map* DGCClient$EndpointEntry::endpointTable = nullptr;
-
 $GC$LatencyRequest* DGCClient$EndpointEntry::gcLatencyRequest = nullptr;
 
 DGCClient$EndpointEntry* DGCClient$EndpointEntry::lookup($Endpoint* ep) {
@@ -221,8 +205,7 @@ void DGCClient$EndpointEntry::init$($Endpoint* endpoint) {
 		$var($LiveRef, dgcRef, $new($LiveRef, $DGCClient::dgcID, endpoint, false));
 		$load($DGCImpl);
 		$set(this, dgc, $cast($DGC, $Util::createProxy($DGCImpl::class$, $$new($UnicastRef, dgcRef), true)));
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throwNew($Error, "internal error creating DGC stub"_s);
 	}
 	$var($Runnable, var$0, static_cast<$Runnable*>($new($DGCClient$EndpointEntry$RenewCleanThread, this)));
@@ -324,8 +307,7 @@ void DGCClient$EndpointEntry::makeDirtyCall($Set* refEntries, int64_t sequenceNu
 			setRenewTime(newRenewTime);
 			this->expirationTime = newExpirationTime;
 		}
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		int64_t endTime = $System::currentTimeMillis();
 		$synchronized(this) {
 			++this->dirtyFailures;
@@ -430,8 +412,7 @@ void DGCClient$EndpointEntry::makeCleanCalls() {
 			$init($DGCClient);
 			$nc(this->dgc)->clean($nc(request)->objIDs, request->sequenceNum, $DGCClient::vmid, request->strong);
 			iter->remove();
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
+		} catch ($Exception& e) {
 			if (++$nc(request)->failures >= 5) {
 				iter->remove();
 			}

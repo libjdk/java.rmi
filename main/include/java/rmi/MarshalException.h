@@ -22,8 +22,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x565E821426C57DB0;
 	MarshalException(const MarshalException& e);
-	MarshalException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline MarshalException* operator ->() {
+		return (MarshalException*)throwing$;
+	}
 };
 
 	} // rmi

@@ -16,8 +16,10 @@ public:
 	void init$($String* s);
 	static const int64_t serialVersionUID = (int64_t)0xE637F9A72D7C3AFB;
 	NotBoundException(const NotBoundException& e);
-	NotBoundException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline NotBoundException* operator ->() {
+		return (NotBoundException*)throwing$;
+	}
 };
 
 	} // rmi

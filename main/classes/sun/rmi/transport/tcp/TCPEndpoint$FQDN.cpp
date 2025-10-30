@@ -1,17 +1,7 @@
 #include <sun/rmi/transport/tcp/TCPEndpoint$FQDN.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/InetAddress.h>
 #include <java/net/UnknownHostException.h>
 #include <java/security/AccessController.h>
@@ -95,8 +85,7 @@ $String* TCPEndpoint$FQDN::attemptFQDN($InetAddress* localAddr) {
 				f->getFQDN();
 				$of(f)->wait(nameServiceTimeOut);
 			}
-		} catch ($InterruptedException&) {
-			$var($InterruptedException, e, $catch());
+		} catch ($InterruptedException& e) {
 			$($Thread::currentThread())->interrupt();
 		}
 		$assign(hostName, f->getHost());
@@ -129,11 +118,10 @@ void TCPEndpoint$FQDN::run() {
 		try {
 			try {
 				$assign(name, $nc($($InetAddress::getByName(this->hostAddress)))->getHostName());
-			} catch ($UnknownHostException&) {
-				$catch();
+			} catch ($UnknownHostException& e) {
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			$synchronized(this) {
 				$set(this, reverseLookup, name);

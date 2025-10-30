@@ -1,16 +1,5 @@
 #include <java/rmi/Naming.h>
 
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/MalformedURLException.h>
 #include <java/net/URI.h>
 #include <java/net/URISyntaxException.h>
@@ -142,8 +131,7 @@ $Naming$ParsedNamingURL* Naming::parseURL($String* str) {
 	$useLocalCurrentObjectStackCache();
 	try {
 		return intParseURL(str);
-	} catch ($URISyntaxException&) {
-		$var($URISyntaxException, ex, $catch());
+	} catch ($URISyntaxException& ex) {
 		$var($MalformedURLException, mue, $new($MalformedURLException, $$str({"invalid URL String: "_s, str})));
 		mue->initCause(ex);
 		int32_t indexSchemeEnd = $nc(str)->indexOf((int32_t)u':');
@@ -157,11 +145,9 @@ $Naming$ParsedNamingURL* Naming::parseURL($String* str) {
 			$var($String, newStr, $concat(var$0, $(str->substring(indexHostBegin))));
 			try {
 				return intParseURL(newStr);
-			} catch ($URISyntaxException&) {
-				$var($URISyntaxException, inte, $catch());
+			} catch ($URISyntaxException& inte) {
 				$throw(mue);
-			} catch ($MalformedURLException&) {
-				$var($MalformedURLException, inte, $catch());
+			} catch ($MalformedURLException& inte) {
 				$throw(inte);
 			}
 		}
@@ -201,16 +187,14 @@ $Naming$ParsedNamingURL* Naming::intParseURL($String* str) {
 		$assign(host, ""_s);
 		try {
 			uri->parseServerAuthority();
-		} catch ($URISyntaxException&) {
-			$var($URISyntaxException, use, $catch());
+		} catch ($URISyntaxException& use) {
 			$var($String, authority, uri->getAuthority());
 			if (authority != nullptr && authority->startsWith(":"_s)) {
 				$assign(authority, $str({"localhost"_s, authority}));
 				try {
 					$assign(uri, $new($URI, nullptr, authority, nullptr, nullptr, nullptr));
 					uri->parseServerAuthority();
-				} catch ($URISyntaxException&) {
-					$var($URISyntaxException, use2, $catch());
+				} catch ($URISyntaxException& use2) {
 					$throwNew($MalformedURLException, $$str({"invalid authority: "_s, str}));
 				}
 			} else {

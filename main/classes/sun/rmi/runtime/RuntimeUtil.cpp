@@ -1,24 +1,13 @@
 #include <sun/rmi/runtime/RuntimeUtil.h>
 
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/RuntimePermission.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessController.h>
 #include <java/security/BasicPermission.h>
 #include <java/security/Permission.h>
@@ -132,13 +121,9 @@ $Object* allocate$RuntimeUtil($Class* clazz) {
 	return $of($alloc(RuntimeUtil));
 }
 
-
 $Log* RuntimeUtil::runtimeLog = nullptr;
-
 int32_t RuntimeUtil::schedulerThreads = 0;
-
 $Permission* RuntimeUtil::GET_INSTANCE_PERMISSION = nullptr;
-
 RuntimeUtil* RuntimeUtil::instance = nullptr;
 
 void RuntimeUtil::init$() {

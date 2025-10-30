@@ -2,19 +2,7 @@
 
 #include <java/io/DataInput.h>
 #include <java/io/DataOutput.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/Integer.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/Short.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/SecureRandom.h>
 #include <jcpp.h>
 
@@ -99,8 +87,7 @@ void UID::init$() {
 				if (now == UID::lastTime) {
 					try {
 						$Thread::sleep(1);
-					} catch ($InterruptedException&) {
-						$var($InterruptedException, e, $catch());
+					} catch ($InterruptedException& e) {
 						interrupted = true;
 					}
 				} else {

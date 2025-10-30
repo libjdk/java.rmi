@@ -1,12 +1,5 @@
 #include <java/rmi/registry/RegistryHandler.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/registry/Registry.h>
 #include <jcpp.h>
 
@@ -18,6 +11,7 @@ using $Registry = ::java::rmi::registry::Registry;
 namespace java {
 	namespace rmi {
 		namespace registry {
+
 $CompoundAttribute _RegistryHandler_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -32,7 +26,6 @@ $CompoundAttribute _RegistryHandler_MethodAnnotations_registryStub1[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $MethodInfo _RegistryHandler_MethodInfo_[] = {
 	{"registryImpl", "(I)Ljava/rmi/registry/Registry;", nullptr, $PUBLIC | $ABSTRACT | $DEPRECATED, nullptr, "java.rmi.RemoteException", nullptr, _RegistryHandler_MethodAnnotations_registryImpl0},

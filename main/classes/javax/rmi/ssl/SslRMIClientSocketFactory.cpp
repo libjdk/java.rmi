@@ -1,20 +1,6 @@
 #include <javax/rmi/ssl/SslRMIClientSocketFactory.h>
 
 #include <java/io/IOException.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/Socket.h>
 #include <java/rmi/server/RMIClientSocketFactory.h>
 #include <java/util/StringTokenizer.h>
@@ -105,8 +91,7 @@ $Socket* SslRMIClientSocketFactory::createSocket($String* host, int32_t port) {
 		}
 		try {
 			$nc(sslSocket)->setEnabledCipherSuites(enabledCipherSuitesList);
-		} catch ($IllegalArgumentException&) {
-			$var($IllegalArgumentException, e, $catch());
+		} catch ($IllegalArgumentException& e) {
 			$throw($cast($IOException, $($$new($IOException, $(e->getMessage()))->initCause(e))));
 		}
 	}
@@ -120,8 +105,7 @@ $Socket* SslRMIClientSocketFactory::createSocket($String* host, int32_t port) {
 		}
 		try {
 			$nc(sslSocket)->setEnabledProtocols(enabledProtocolsList);
-		} catch ($IllegalArgumentException&) {
-			$var($IllegalArgumentException, e, $catch());
+		} catch ($IllegalArgumentException& e) {
 			$throw($cast($IOException, $($$new($IOException, $(e->getMessage()))->initCause(e))));
 		}
 	}

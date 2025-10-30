@@ -4,27 +4,15 @@
 #include <java/io/ObjectInputStream.h>
 #include <java/io/ObjectStreamClass.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Character.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NoClassDefFoundError.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/server/RMIClassLoader.h>
 #include <java/security/AccessControlException.h>
 #include <java/security/AccessController.h>
@@ -144,9 +132,7 @@ $Object* allocate$MarshalInputStream($Class* clazz) {
 	return $of($alloc(MarshalInputStream));
 }
 
-
 bool MarshalInputStream::useCodebaseOnlyProperty = false;
-
 $Map* MarshalInputStream::permittedSunClasses = nullptr;
 
 void MarshalInputStream::init$($InputStream* in) {
@@ -190,18 +176,15 @@ $Class* MarshalInputStream::resolveClass($ObjectStreamClass* classDesc) {
 	}
 	try {
 		return $RMIClassLoader::loadClass(codebase, className, defaultLoader);
-	} catch ($AccessControlException&) {
-		$var($AccessControlException, e, $catch());
+	} catch ($AccessControlException& e) {
 		return checkSunClass(className, e);
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, e, $catch());
+	} catch ($ClassNotFoundException& e) {
 		try {
 			bool var$0 = $Character::isLowerCase($nc(className)->charAt(0));
 			if (var$0 && $nc(className)->indexOf((int32_t)u'.') == -1) {
 				return $ObjectInputStream::resolveClass(classDesc);
 			}
-		} catch ($ClassNotFoundException&) {
-			$catch();
+		} catch ($ClassNotFoundException& e2) {
 		}
 		$throw(e);
 	}
@@ -269,8 +252,7 @@ void clinit$MarshalInputStream($Class* class$) {
 		try {
 			$var($String, registry, "sun.rmi.registry.RegistryImpl_Stub"_s);
 			$nc(MarshalInputStream::permittedSunClasses)->put(registry, $Class::forName(registry));
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, e, $catch());
+		} catch ($ClassNotFoundException& e) {
 			$throwNew($NoClassDefFoundError, $$str({"Missing system class: "_s, $(e->getMessage())}));
 		}
 	}

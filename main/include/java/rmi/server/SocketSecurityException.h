@@ -23,8 +23,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x9638F4FD9233F7A5;
 	SocketSecurityException(const SocketSecurityException& e);
-	SocketSecurityException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline SocketSecurityException* operator ->() {
+		return (SocketSecurityException*)throwing$;
+	}
 };
 
 		} // server

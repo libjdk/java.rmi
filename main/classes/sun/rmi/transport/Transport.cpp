@@ -4,29 +4,14 @@
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectOutput.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/RuntimePermission.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
 #include <java/lang/ThreadLocal.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/NoSuchObjectException.h>
 #include <java/rmi/Remote.h>
@@ -241,14 +226,10 @@ $Object* allocate$Transport($Class* clazz) {
 	return $of($alloc(Transport));
 }
 
-
 int32_t Transport::logLevel = 0;
 $Log* Transport::transportLog = nullptr;
-
 $ThreadLocal* Transport::currentTransport$ = nullptr;
-
 $ObjID* Transport::dgcID = nullptr;
-
 $AccessControlContext* Transport::SETCCL_ACC = nullptr;
 
 void Transport::init$() {
@@ -287,8 +268,7 @@ bool Transport::serviceCall($RemoteCall* call) {
 		$var($ObjID, id, nullptr);
 		try {
 			$assign(id, $ObjID::read($($nc(call)->getInputStream())));
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "unable to read objID"_s, e);
 		}
 		$var(Transport, transport, $nc(id)->equals(Transport::dgcID) ? (Transport*)nullptr : this);
@@ -316,12 +296,11 @@ bool Transport::serviceCall($RemoteCall* call) {
 							$nc(Transport::currentTransport$)->set(this);
 							try {
 								$AccessController::doPrivileged(static_cast<$PrivilegedExceptionAction*>($$new($Transport$1, this, acc, disp, impl, call)), acc);
-							} catch ($PrivilegedActionException&) {
-								$var($PrivilegedActionException, pae, $catch());
+							} catch ($PrivilegedActionException& pae) {
 								$throw($cast($IOException, $(pae->getException())));
 							}
-						} catch ($Throwable&) {
-							$assign(var$3, $catch());
+						} catch ($Throwable& var$4) {
+							$assign(var$3, var$4);
 						} /*finally*/ {
 							setContextClassLoader(savedCcl);
 							$nc(Transport::currentTransport$)->set(nullptr);
@@ -330,16 +309,15 @@ bool Transport::serviceCall($RemoteCall* call) {
 							$throw(var$3);
 						}
 					}
-				} catch ($IOException&) {
-					$var($IOException, ex, $catch());
+				} catch ($IOException& ex) {
 					$init($Log);
 					$nc(Transport::transportLog)->log($Log::BRIEF, "exception thrown by dispatcher: "_s, ex);
 					var$2 = false;
 					return$1 = true;
 					goto $finally;
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$5) {
+				$assign(var$0, var$5);
 			} $finally: {
 				target->decrementCallCount();
 			}
@@ -350,16 +328,14 @@ bool Transport::serviceCall($RemoteCall* call) {
 				return var$2;
 			}
 		}
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$init($UnicastServerRef);
 		$init($Log);
 		if ($nc($UnicastServerRef::callLog)->isLoggable($Log::BRIEF)) {
 			$var($String, clientHost, ""_s);
 			try {
 				$assign(clientHost, $str({"["_s, $($RemoteServer::getClientHost()), "] "_s}));
-			} catch ($ServerNotActiveException&) {
-				$catch();
+			} catch ($ServerNotActiveException& ex) {
 			}
 			$var($String, message, $str({clientHost, "exception: "_s}));
 			$nc($UnicastServerRef::callLog)->log($Log::BRIEF, message, e);
@@ -369,8 +345,7 @@ bool Transport::serviceCall($RemoteCall* call) {
 			$UnicastServerRef::clearStackTraces(e);
 			$nc(out)->writeObject(e);
 			call->releaseOutputStream();
-		} catch ($IOException&) {
-			$var($IOException, ie, $catch());
+		} catch ($IOException& ie) {
 			$nc(Transport::transportLog)->log($Log::BRIEF, "exception thrown marshalling exception: "_s, ie);
 			return false;
 		}

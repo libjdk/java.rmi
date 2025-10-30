@@ -23,8 +23,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x80F12E97ACC3B976;
 	ExportException(const ExportException& e);
-	ExportException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline ExportException* operator ->() {
+		return (ExportException*)throwing$;
+	}
 };
 
 		} // server

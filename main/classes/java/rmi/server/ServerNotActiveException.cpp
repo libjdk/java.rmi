@@ -1,13 +1,5 @@
 #include <java/rmi/server/ServerNotActiveException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ClassInfo = ::java::lang::ClassInfo;
@@ -54,16 +46,10 @@ void ServerNotActiveException::init$($String* s) {
 ServerNotActiveException::ServerNotActiveException() {
 }
 
-ServerNotActiveException::ServerNotActiveException(const ServerNotActiveException& e) {
+ServerNotActiveException::ServerNotActiveException(const ServerNotActiveException& e) : $Exception(e) {
 }
 
-ServerNotActiveException ServerNotActiveException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void ServerNotActiveException::throwWrapper$() {
-	$pendingException(this);
+void ServerNotActiveException::throw$() {
 	throw *this;
 }
 

@@ -1,25 +1,14 @@
 #include <sun/rmi/transport/ObjectTable.h>
 
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Runnable.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/ReferenceQueue.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/NoSuchObjectException.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/dgc/VMID.h>
@@ -174,22 +163,14 @@ $Object* allocate$ObjectTable($Class* clazz) {
 	return $of($alloc(ObjectTable));
 }
 
-
 int64_t ObjectTable::gcInterval = 0;
-
 $Object* ObjectTable::tableLock = nullptr;
-
 $Map* ObjectTable::objTable = nullptr;
 $Map* ObjectTable::implTable = nullptr;
-
 $Object* ObjectTable::keepAliveLock = nullptr;
-
 int32_t ObjectTable::keepAliveCount = 0;
-
 $Thread* ObjectTable::reaper = nullptr;
-
 $ReferenceQueue* ObjectTable::reapQueue = nullptr;
-
 $GC$LatencyRequest* ObjectTable::gcLatencyRequest = nullptr;
 
 void ObjectTable::init$() {

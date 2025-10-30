@@ -3,20 +3,8 @@
 #include <java/io/IOException.h>
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectOutput.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/AlreadyBoundException.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/NotBoundException.h>
@@ -136,23 +124,18 @@ void RegistryImpl_Stub::bind($String* $param_String_1, $Remote* $param_Remote_2)
 			$var($ObjectOutput, out, $nc(call)->getOutputStream());
 			$nc(out)->writeObject($param_String_1);
 			out->writeObject($param_Remote_2);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
 		$nc(this->ref)->done(call);
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($AlreadyBoundException&) {
-		$var($AlreadyBoundException, e, $catch());
+	} catch ($AlreadyBoundException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 }
@@ -169,21 +152,18 @@ $StringArray* RegistryImpl_Stub::list() {
 				try {
 					$var($ObjectInput, in, $nc(call)->getInputStream());
 					$assign($result, $cast($StringArray, $nc(in)->readObject()));
-				} catch ($ClassCastException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassCastException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($IOException&) {
-					$var($Exception, e, $catch());
+				} catch ($IOException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($ClassNotFoundException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassNotFoundException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				$nc(this->ref)->done(call);
 			}
@@ -192,14 +172,11 @@ $StringArray* RegistryImpl_Stub::list() {
 			}
 		}
 		return $result;
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 	$shouldNotReachHere();
@@ -212,8 +189,7 @@ $Remote* RegistryImpl_Stub::lookup($String* $param_String_1) {
 		try {
 			$var($ObjectOutput, out, $nc(call)->getOutputStream());
 			$nc(out)->writeObject($param_String_1);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
@@ -224,21 +200,18 @@ $Remote* RegistryImpl_Stub::lookup($String* $param_String_1) {
 				try {
 					$var($ObjectInput, in, $nc(call)->getInputStream());
 					$assign($result, $cast($Remote, $nc(in)->readObject()));
-				} catch ($ClassCastException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassCastException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($IOException&) {
-					$var($Exception, e, $catch());
+				} catch ($IOException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($ClassNotFoundException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassNotFoundException& e) {
 					$nc(call)->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				$nc(this->ref)->done(call);
 			}
@@ -247,17 +220,13 @@ $Remote* RegistryImpl_Stub::lookup($String* $param_String_1) {
 			}
 		}
 		return $result;
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($NotBoundException&) {
-		$var($NotBoundException, e, $catch());
+	} catch ($NotBoundException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 	$shouldNotReachHere();
@@ -271,20 +240,16 @@ void RegistryImpl_Stub::rebind($String* $param_String_1, $Remote* $param_Remote_
 			$var($ObjectOutput, out, $nc(call)->getOutputStream());
 			$nc(out)->writeObject($param_String_1);
 			out->writeObject($param_Remote_2);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
 		$nc(this->ref)->done(call);
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 }
@@ -296,23 +261,18 @@ void RegistryImpl_Stub::unbind($String* $param_String_1) {
 		try {
 			$var($ObjectOutput, out, $nc(call)->getOutputStream());
 			$nc(out)->writeObject($param_String_1);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
 		$nc(this->ref)->done(call);
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($NotBoundException&) {
-		$var($NotBoundException, e, $catch());
+	} catch ($NotBoundException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 }

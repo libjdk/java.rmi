@@ -5,34 +5,15 @@
 #include <java/io/ObjectInputFilter.h>
 #include <java/io/ObjectInputStream.h>
 #include <java/io/ObjectOutput.h>
-#include <java/io/PrintStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/StackTraceElement.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/InvocationTargetException.h>
 #include <java/lang/reflect/Method.h>
 #include <java/rmi/AccessException.h>
@@ -418,17 +399,11 @@ void UnicastServerRef::finalize() {
 	this->$UnicastRef::finalize();
 }
 
-
 bool UnicastServerRef::logCalls = false;
-
 $Log* UnicastServerRef::callLog = nullptr;
-
 bool UnicastServerRef::wantExceptionLog = false;
-
 bool UnicastServerRef::suppressStackTraces = false;
-
 $WeakClassHashMap* UnicastServerRef::hashToMethod_Maps = nullptr;
-
 $Map* UnicastServerRef::withoutSkeletons = nullptr;
 
 void UnicastServerRef::init$() {
@@ -475,8 +450,7 @@ $Remote* UnicastServerRef::exportObject($Remote* impl, Object$* data, bool perma
 	$var($Remote, stub, nullptr);
 	try {
 		$assign(stub, $Util::createProxy(implClass, $(getClientRef()), this->forceStubUse));
-	} catch ($IllegalArgumentException&) {
-		$var($IllegalArgumentException, e, $catch());
+	} catch ($IllegalArgumentException& e) {
 		$throwNew($ExportException, "remote object implements illegal remote interface"_s, e);
 	}
 	if ($instanceOf($RemoteStub, stub)) {
@@ -496,8 +470,7 @@ void UnicastServerRef::setSkeleton($Remote* impl) {
 	if (!$nc(UnicastServerRef::withoutSkeletons)->containsKey($nc($of(impl))->getClass())) {
 		try {
 			$set(this, skel, $Util::createSkeleton(impl));
-		} catch ($SkeletonNotFoundException&) {
-			$var($SkeletonNotFoundException, e, $catch());
+		} catch ($SkeletonNotFoundException& e) {
 			$nc(UnicastServerRef::withoutSkeletons)->put($nc($of(impl))->getClass(), nullptr);
 		}
 	}
@@ -517,8 +490,7 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 				try {
 					$assign(in, $nc(call)->getInputStream());
 					num = $nc(in)->readInt();
-				} catch ($Exception&) {
-					$var($Exception, readEx, $catch());
+				} catch ($Exception& readEx) {
 					$throwNew($UnmarshalException, "error unmarshalling call header"_s, readEx);
 				}
 				if (this->skel != nullptr) {
@@ -530,8 +502,7 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 				}
 				try {
 					op = $nc(in)->readLong();
-				} catch ($Exception&) {
-					$var($Exception, readEx, $catch());
+				} catch ($Exception& readEx) {
 					$throwNew($UnmarshalException, "error unmarshalling call header"_s, readEx);
 				}
 				$var($MarshalInputStream, marshalStream, $cast($MarshalInputStream, in));
@@ -551,21 +522,18 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 							for (int32_t i = 0; i < types->length; ++i) {
 								params->set(i, $(unmarshalValue(types->get(i), in)));
 							}
-						} catch ($AccessException&) {
-							$var($AccessException, aex, $catch());
+						} catch ($AccessException& aex) {
 							$nc(($cast($StreamRemoteCall, call)))->discardPendingRefs();
 							$throw(aex);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(($cast($StreamRemoteCall, call)))->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(($cast($StreamRemoteCall, call)))->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$2, $catch());
+					} catch ($Throwable& var$3) {
+						$assign(var$2, var$3);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
@@ -576,8 +544,7 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 				$var($Object, result, nullptr);
 				try {
 					$assign(result, method->invoke(obj, params));
-				} catch ($InvocationTargetException&) {
-					$var($InvocationTargetException, e, $catch());
+				} catch ($InvocationTargetException& e) {
 					$throw($(e->getTargetException()));
 				}
 				try {
@@ -587,12 +554,10 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 					if (rtype != $Void::TYPE) {
 						marshalValue(rtype, result, out);
 					}
-				} catch ($IOException&) {
-					$var($IOException, ex, $catch());
+				} catch ($IOException& ex) {
 					$throwNew($MarshalException, "error marshalling return"_s, ex);
 				}
-			} catch ($Throwable&) {
-				$var($Throwable, e, $catch());
+			} catch ($Throwable& e) {
 				$var($Throwable, origEx, e);
 				logCallException(e);
 				$var($ObjectOutput, out, $nc(call)->getResultStream(false));
@@ -609,8 +574,8 @@ void UnicastServerRef::dispatch($Remote* obj, $RemoteCall* call) {
 					$throwNew($IOException, "Connection is not reusable"_s, origEx);
 				}
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$4) {
+			$assign(var$0, var$4);
 		} $finally: {
 			$nc(call)->releaseInputStream();
 			call->releaseOutputStream();
@@ -644,13 +609,11 @@ void UnicastServerRef::oldDispatch($Remote* obj, $RemoteCall* call, int32_t op) 
 		if ($nc(clazz)->isAssignableFrom($nc($of(this->skel))->getClass())) {
 			$nc(($cast($MarshalInputStream, in)))->useCodebaseOnly();
 		}
-	} catch ($ClassNotFoundException&) {
-		$catch();
+	} catch ($ClassNotFoundException& ignore) {
 	}
 	try {
 		hash = $nc(in)->readLong();
-	} catch ($Exception&) {
-		$var($Exception, ioe, $catch());
+	} catch ($Exception& ioe) {
 		$throwNew($UnmarshalException, "error unmarshalling call header"_s, ioe);
 	}
 	$var($OperationArray, operations, $nc(this->skel)->getOperations());
@@ -677,8 +640,7 @@ void UnicastServerRef::logCall($Remote* obj, Object$* method) {
 		$var($String, clientHost, nullptr);
 		try {
 			$assign(clientHost, getClientHost());
-		} catch ($ServerNotActiveException&) {
-			$var($ServerNotActiveException, snae, $catch());
+		} catch ($ServerNotActiveException& snae) {
 			$assign(clientHost, "(local)"_s);
 		}
 		$var($String, var$3, $$str({"["_s, clientHost, ": "_s, $($nc($of(obj))->getClass()->getName())}));
@@ -696,13 +658,11 @@ void UnicastServerRef::logCallException($Throwable* e) {
 		$var($String, clientHost, ""_s);
 		try {
 			$assign(clientHost, $str({"["_s, $(getClientHost()), "] "_s}));
-		} catch ($ServerNotActiveException&) {
-			$catch();
+		} catch ($ServerNotActiveException& snae) {
 		}
 		$nc(UnicastServerRef::callLog)->log($Log::BRIEF, $$str({clientHost, "exception: "_s}), e);
 	}
 	if (UnicastServerRef::wantExceptionLog) {
-		$init($System);
 		$var($PrintStream, log, $System::err);
 		$synchronized(log) {
 			$nc(log)->println();

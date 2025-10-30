@@ -1,11 +1,5 @@
 #include <java/rmi/dgc/DGC.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/dgc/Lease.h>
 #include <java/rmi/dgc/VMID.h>
 #include <java/rmi/server/ObjID.h>

@@ -27,8 +27,10 @@ public:
 	::java::lang::Exception* detail = nullptr;
 	static const int64_t serialVersionUID = (int64_t)0x5BD5ED7F1B42FB49;
 	ServerCloneException(const ServerCloneException& e);
-	ServerCloneException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline ServerCloneException* operator ->() {
+		return (ServerCloneException*)throwing$;
+	}
 };
 
 		} // server

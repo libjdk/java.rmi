@@ -1,13 +1,5 @@
 #include <java/rmi/server/SkeletonMismatchException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -20,6 +12,7 @@ using $RemoteException = ::java::rmi::RemoteException;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _SkeletonMismatchException_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -29,7 +22,6 @@ $CompoundAttribute _SkeletonMismatchException_MethodAnnotations_init$0[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $FieldInfo _SkeletonMismatchException_FieldInfo_[] = {
 	{"serialVersionUID", "J", nullptr, $PRIVATE | $STATIC | $FINAL, $constField(SkeletonMismatchException, serialVersionUID)},
@@ -65,16 +57,10 @@ void SkeletonMismatchException::init$($String* s) {
 SkeletonMismatchException::SkeletonMismatchException() {
 }
 
-SkeletonMismatchException::SkeletonMismatchException(const SkeletonMismatchException& e) {
+SkeletonMismatchException::SkeletonMismatchException(const SkeletonMismatchException& e) : $RemoteException(e) {
 }
 
-SkeletonMismatchException SkeletonMismatchException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void SkeletonMismatchException::throwWrapper$() {
-	$pendingException(this);
+void SkeletonMismatchException::throw$() {
 	throw *this;
 }
 

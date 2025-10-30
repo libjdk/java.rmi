@@ -1,14 +1,5 @@
 #include <java/rmi/ConnectException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -56,16 +47,10 @@ void ConnectException::init$($String* s, $Exception* ex) {
 ConnectException::ConnectException() {
 }
 
-ConnectException::ConnectException(const ConnectException& e) {
+ConnectException::ConnectException(const ConnectException& e) : $RemoteException(e) {
 }
 
-ConnectException ConnectException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void ConnectException::throwWrapper$() {
-	$pendingException(this);
+void ConnectException::throw$() {
 	throw *this;
 }
 

@@ -16,8 +16,10 @@ public:
 	void init$($String* s);
 	static const int64_t serialVersionUID = (int64_t)0x94064070618C36EF;
 	SkeletonMismatchException(const SkeletonMismatchException& e);
-	SkeletonMismatchException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline SkeletonMismatchException* operator ->() {
+		return (SkeletonMismatchException*)throwing$;
+	}
 };
 
 		} // server

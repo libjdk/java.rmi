@@ -1,13 +1,6 @@
 #include <java/rmi/server/RemoteRef.h>
 
 #include <java/io/ObjectOutput.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/Method.h>
 #include <java/rmi/server/Operation.h>
 #include <java/rmi/server/RemoteCall.h>
@@ -80,7 +73,6 @@ $ClassInfo _RemoteRef_ClassInfo_ = {
 $Object* allocate$RemoteRef($Class* clazz) {
 	return $of($alloc(RemoteRef));
 }
-
 
 $String* RemoteRef::packagePrefix = nullptr;
 

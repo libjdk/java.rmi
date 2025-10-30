@@ -7,17 +7,6 @@
 #include <java/io/IOException.h>
 #include <java/io/InputStream.h>
 #include <java/io/OutputStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/Socket.h>
 #include <java/util/logging/Level.h>
 #include <sun/rmi/runtime/Log.h>
@@ -170,8 +159,7 @@ bool TCPConnection::isDead() {
 	try {
 		$assign(i, getInputStream());
 		$assign(o, getOutputStream());
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		return (true);
 	}
 	int32_t response = 0;
@@ -179,8 +167,7 @@ bool TCPConnection::isDead() {
 		$nc(o)->write((int32_t)$TransportConstants::Ping);
 		o->flush();
 		response = $nc(i)->read();
-	} catch ($IOException&) {
-		$var($IOException, ex, $catch());
+	} catch ($IOException& ex) {
 		$init($TCPTransport);
 		$init($Log);
 		$nc($TCPTransport::tcpLog)->log($Log::VERBOSE, "exception: "_s, ex);

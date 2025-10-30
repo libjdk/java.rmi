@@ -1,14 +1,6 @@
 #include <sun/rmi/transport/ObjectEndpoint.h>
 
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/server/ObjID.h>
 #include <sun/rmi/transport/Transport.h>
 #include <jcpp.h>

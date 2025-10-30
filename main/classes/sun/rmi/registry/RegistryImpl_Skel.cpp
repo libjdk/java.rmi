@@ -4,18 +4,8 @@
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectInputStream.h>
 #include <java/io/ObjectOutput.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/UnmarshalException.h>
@@ -125,21 +115,18 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 							$var($ObjectInputStream, in, $cast($ObjectInputStream, $nc(call)->getInputStream()));
 							$assign($param_String_1, $nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString(in));
 							$assign($param_Remote_2, $cast($Remote, $nc(in)->readObject()));
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$0, $catch());
+					} catch ($Throwable& var$1) {
+						$assign(var$0, var$1);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
@@ -150,8 +137,7 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 				$nc(server)->bind($param_String_1, $param_Remote_2);
 				try {
 					call->getResultStream(true);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;
@@ -165,8 +151,7 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 				try {
 					$var($ObjectOutput, out, call->getResultStream(true));
 					$nc(out)->writeObject($result);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;
@@ -177,35 +162,32 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 			{
 				$var($String, $param_String_1, nullptr);
 				{
-					$var($Throwable, var$1, nullptr);
+					$var($Throwable, var$2, nullptr);
 					try {
 						try {
 							$var($ObjectInputStream, in, $cast($ObjectInputStream, $nc(call)->getInputStream()));
 							$assign($param_String_1, $nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString(in));
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$1, $catch());
+					} catch ($Throwable& var$3) {
+						$assign(var$2, var$3);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
-					if (var$1 != nullptr) {
-						$throw(var$1);
+					if (var$2 != nullptr) {
+						$throw(var$2);
 					}
 				}
 				$var($Remote, $result, $nc(server)->lookup($param_String_1));
 				try {
 					$var($ObjectOutput, out, call->getResultStream(true));
 					$nc(out)->writeObject($result);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;
@@ -218,39 +200,35 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 				$var($String, $param_String_1, nullptr);
 				$var($Remote, $param_Remote_2, nullptr);
 				{
-					$var($Throwable, var$2, nullptr);
+					$var($Throwable, var$4, nullptr);
 					try {
 						try {
 							$var($ObjectInputStream, in, $cast($ObjectInputStream, $nc(call)->getInputStream()));
 							$assign($param_String_1, $nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString(in));
 							$assign($param_Remote_2, $cast($Remote, $nc(in)->readObject()));
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$2, $catch());
+					} catch ($Throwable& var$5) {
+						$assign(var$4, var$5);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
-					if (var$2 != nullptr) {
-						$throw(var$2);
+					if (var$4 != nullptr) {
+						$throw(var$4);
 					}
 				}
 				$nc(server)->rebind($param_String_1, $param_Remote_2);
 				try {
 					call->getResultStream(true);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;
@@ -262,34 +240,31 @@ void RegistryImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t 
 				$RegistryImpl::checkAccess("Registry.unbind"_s);
 				$var($String, $param_String_1, nullptr);
 				{
-					$var($Throwable, var$3, nullptr);
+					$var($Throwable, var$6, nullptr);
 					try {
 						try {
 							$var($ObjectInputStream, in, $cast($ObjectInputStream, $nc(call)->getInputStream()));
 							$assign($param_String_1, $nc($($SharedSecrets::getJavaObjectInputStreamReadString()))->readString(in));
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$3, $catch());
+					} catch ($Throwable& var$7) {
+						$assign(var$6, var$7);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
-					if (var$3 != nullptr) {
-						$throw(var$3);
+					if (var$6 != nullptr) {
+						$throw(var$6);
 					}
 				}
 				$nc(server)->unbind($param_String_1);
 				try {
 					call->getResultStream(true);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;

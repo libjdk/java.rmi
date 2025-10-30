@@ -1,12 +1,5 @@
 #include <java/rmi/registry/LocateRegistry.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/InetAddress.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/registry/Registry.h>
@@ -102,8 +95,7 @@ $Registry* LocateRegistry::getRegistry($String* host$renamed, int32_t port, $RMI
 	if (host == nullptr || $nc(host)->length() == 0) {
 		try {
 			$assign(host, $nc($($InetAddress::getLocalHost()))->getHostAddress());
-		} catch ($Exception&) {
-			$var($Exception, e, $catch());
+		} catch ($Exception& e) {
 			$assign(host, ""_s);
 		}
 	}

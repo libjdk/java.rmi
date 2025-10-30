@@ -16,8 +16,10 @@ public:
 	void init$($String* name, $String* arg);
 	static const int64_t serialVersionUID = (int64_t)0x8AF685DB30DED396;
 	RMISecurityException(const RMISecurityException& e);
-	RMISecurityException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline RMISecurityException* operator ->() {
+		return (RMISecurityException*)throwing$;
+	}
 };
 
 	} // rmi

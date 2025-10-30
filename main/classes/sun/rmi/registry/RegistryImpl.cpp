@@ -6,34 +6,18 @@
 #include <java/io/ObjectInputFilter$FilterInfo.h>
 #include <java/io/ObjectInputFilter$Status.h>
 #include <java/io/ObjectInputFilter.h>
-#include <java/io/PrintStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
 #include <java/lang/InterruptedException.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/Number.h>
 #include <java/lang/NumberFormatException.h>
 #include <java/lang/RuntimePermission.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/Proxy.h>
 #include <java/net/InetAddress.h>
 #include <java/net/MalformedURLException.h>
@@ -366,9 +350,7 @@ $Hashtable* RegistryImpl::allowedAccessCache = nullptr;
 RegistryImpl* RegistryImpl::registry = nullptr;
 $ObjID* RegistryImpl::id = nullptr;
 $ResourceBundle* RegistryImpl::resources = nullptr;
-
 $String* RegistryImpl::REGISTRY_FILTER_PROPNAME = nullptr;
-
 $ObjectInputFilter* RegistryImpl::registryFilter$ = nullptr;
 
 $ObjectInputFilter* RegistryImpl::initRegistryFilter() {
@@ -402,8 +384,7 @@ void RegistryImpl::init$(int32_t port, $RMIClientSocketFactory* csf, $RMIServerS
 		try {
 			$var($PrivilegedExceptionAction, var$0, static_cast<$PrivilegedExceptionAction*>($new($RegistryImpl$1, this, port, csf, ssf, serialFilter)));
 			$AccessController::doPrivileged(var$0, ($AccessControlContext*)nullptr, $$new($PermissionArray, {static_cast<$Permission*>($$new($SocketPermission, $$str({"localhost:"_s, $$str(port)}), "listen,accept"_s))}));
-		} catch ($PrivilegedActionException&) {
-			$var($PrivilegedActionException, pae, $catch());
+		} catch ($PrivilegedActionException& pae) {
 			$throw($cast($RemoteException, $(pae->getException())));
 		}
 	} else {
@@ -421,8 +402,7 @@ void RegistryImpl::init$(int32_t port) {
 		try {
 			$var($PrivilegedExceptionAction, var$0, static_cast<$PrivilegedExceptionAction*>($new($RegistryImpl$2, this, port)));
 			$AccessController::doPrivileged(var$0, ($AccessControlContext*)nullptr, $$new($PermissionArray, {static_cast<$Permission*>($$new($SocketPermission, $$str({"localhost:"_s, $$str(port)}), "listen,accept"_s))}));
-		} catch ($PrivilegedActionException&) {
-			$var($PrivilegedActionException, pae, $catch());
+		} catch ($PrivilegedActionException& pae) {
 			$throw($cast($RemoteException, $(pae->getException())));
 		}
 	} else {
@@ -493,8 +473,7 @@ void RegistryImpl::checkAccess($String* op) {
 		$var($InetAddress, clientHost, nullptr);
 		try {
 			$assign(clientHost, $cast($InetAddress, $AccessController::doPrivileged(static_cast<$PrivilegedExceptionAction*>($$new($RegistryImpl$3, clientHostName)))));
-		} catch ($PrivilegedActionException&) {
-			$var($PrivilegedActionException, pae, $catch());
+		} catch ($PrivilegedActionException& pae) {
 			$throw($cast($UnknownHostException, $(pae->getException())));
 		}
 		if ($nc(RegistryImpl::allowedAccessCache)->get(clientHost) == nullptr) {
@@ -504,15 +483,12 @@ void RegistryImpl::checkAccess($String* op) {
 			try {
 				$var($InetAddress, finalClientHost, clientHost);
 				$AccessController::doPrivileged(static_cast<$PrivilegedExceptionAction*>($$new($RegistryImpl$4, finalClientHost)));
-			} catch ($PrivilegedActionException&) {
-				$var($PrivilegedActionException, pae, $catch());
+			} catch ($PrivilegedActionException& pae) {
 				$throwNew($AccessException, $$str({op, " disallowed; origin "_s, clientHost, " is non-local host"_s}));
 			}
 		}
-	} catch ($ServerNotActiveException&) {
-		$catch();
-	} catch ($UnknownHostException&) {
-		$var($UnknownHostException, ex, $catch());
+	} catch ($ServerNotActiveException& ex) {
+	} catch ($UnknownHostException& ex) {
 		$throwNew($AccessException, $$str({op, " disallowed; origin is unknown host"_s}));
 	}
 }
@@ -528,8 +504,7 @@ $String* RegistryImpl::getTextResource($String* key) {
 	if (RegistryImpl::resources == nullptr) {
 		try {
 			$assignStatic(RegistryImpl::resources, $ResourceBundle::getBundle("sun.rmi.registry.resources.rmiregistry"_s));
-		} catch ($MissingResourceException&) {
-			$catch();
+		} catch ($MissingResourceException& mre) {
 		}
 		if (RegistryImpl::resources == nullptr) {
 			return ($str({"[missing resource file: "_s, key, "]"_s}));
@@ -538,8 +513,7 @@ $String* RegistryImpl::getTextResource($String* key) {
 	$var($String, val, nullptr);
 	try {
 		$assign(val, $nc(RegistryImpl::resources)->getString(key));
-	} catch ($MissingResourceException&) {
-		$catch();
+	} catch ($MissingResourceException& mre) {
 	}
 	if (val == nullptr) {
 		return ($str({"[missing resource: "_s, key, "]"_s}));
@@ -563,14 +537,12 @@ $URLArray* RegistryImpl::pathToURLs($String* path) {
 				$var($Path, p, $Paths::get(entry, $$new($StringArray, 0)));
 				try {
 					$assign(p, $nc(p)->toRealPath($$new($LinkOptionArray, 0)));
-				} catch ($IOException&) {
-					$var($IOException, x, $catch());
+				} catch ($IOException& x) {
 					$assign(p, $nc(p)->toAbsolutePath());
 				}
 				try {
 					paths->add($($nc($($nc(p)->toUri()))->toURL()));
-				} catch ($MalformedURLException&) {
-					$catch();
+				} catch ($MalformedURLException& e) {
 				}
 			}
 		}
@@ -598,7 +570,6 @@ $ObjectInputFilter$Status* RegistryImpl::registryFilter($ObjectInputFilter$Filte
 			$init($ObjectInputFilter$Status);
 			return (var$0 && filterInfo->arrayLength() > RegistryImpl::REGISTRY_MAX_ARRAY_SIZE) ? $ObjectInputFilter$Status::REJECTED : $ObjectInputFilter$Status::UNDECIDED;
 		}
-		$load($String);
 		$load($Number);
 		bool var$6 = $String::class$ == clazz || $Number::class$->isAssignableFrom(clazz);
 		$load($Remote);
@@ -643,8 +614,7 @@ RegistryImpl* RegistryImpl::createRegistry(int32_t regPort) {
 	try {
 		$var($PrivilegedExceptionAction, var$0, static_cast<$PrivilegedExceptionAction*>($new($RegistryImpl$5, regPort)));
 		$assign(registryImpl, $cast(RegistryImpl, $AccessController::doPrivileged(var$0, $(getAccessControlContext(regPort)))));
-	} catch ($PrivilegedActionException&) {
-		$var($PrivilegedActionException, ex, $catch());
+	} catch ($PrivilegedActionException& ex) {
 		$throw($cast($RemoteException, $(ex->getException())));
 	}
 	return registryImpl;
@@ -659,17 +629,13 @@ void RegistryImpl::main($StringArray* args) {
 		while (true) {
 			try {
 				$Thread::sleep($Long::MAX_VALUE);
-			} catch ($InterruptedException&) {
-				$catch();
+			} catch ($InterruptedException& e) {
 			}
 		}
-	} catch ($NumberFormatException&) {
-		$var($NumberFormatException, e, $catch());
-		$init($System);
+	} catch ($NumberFormatException& e) {
 		$nc($System::err)->println($($MessageFormat::format($(getTextResource("rmiregistry.port.badnumber"_s)), $$new($ObjectArray, {$of($nc(args)->get(0))}))));
 		$nc($System::err)->println($($MessageFormat::format($(getTextResource("rmiregistry.usage"_s)), $$new($ObjectArray, {$of("rmiregistry"_s)}))));
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		e->printStackTrace();
 	}
 	$System::exit(1);

@@ -1,12 +1,5 @@
 #include <java/rmi/NoSuchObjectException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -48,16 +41,10 @@ void NoSuchObjectException::init$($String* s) {
 NoSuchObjectException::NoSuchObjectException() {
 }
 
-NoSuchObjectException::NoSuchObjectException(const NoSuchObjectException& e) {
+NoSuchObjectException::NoSuchObjectException(const NoSuchObjectException& e) : $RemoteException(e) {
 }
 
-NoSuchObjectException NoSuchObjectException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void NoSuchObjectException::throwWrapper$() {
-	$pendingException(this);
+void NoSuchObjectException::throw$() {
 	throw *this;
 }
 

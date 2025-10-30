@@ -12,27 +12,13 @@
 #include <java/io/OutputStream.h>
 #include <java/io/Serializable.h>
 #include <java/io/StreamCorruptedException.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
 #include <java/lang/IllegalStateException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/StackTraceElement.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/UnmarshalException.h>
 #include <java/rmi/server/ObjID.h>
@@ -202,7 +188,6 @@ void StreamRemoteCall::init$($Connection* c) {
 }
 
 void StreamRemoteCall::init$($Connection* c, $ObjID* id, int32_t op, int64_t hash) {
-	$useLocalCurrentObjectStackCache();
 	$set(this, in, nullptr);
 	$set(this, out, nullptr);
 	$set(this, filter, nullptr);
@@ -218,8 +203,7 @@ void StreamRemoteCall::init$($Connection* c, $ObjID* id, int32_t op, int64_t has
 		$nc(id)->write(this->out);
 		$nc(this->out)->writeInt(op);
 		$nc(this->out)->writeLong(hash);
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		$throwNew($MarshalException, "Error marshaling call header"_s, e);
 	}
 }
@@ -252,8 +236,8 @@ void StreamRemoteCall::releaseOutputStream() {
 					$var($Throwable, var$1, nullptr);
 					try {
 						$nc(this->out)->flush();
-					} catch ($Throwable&) {
-						$assign(var$1, $catch());
+					} catch ($Throwable& var$2) {
+						$assign(var$1, var$2);
 					} /*finally*/ {
 						$nc(this->out)->done();
 					}
@@ -263,8 +247,8 @@ void StreamRemoteCall::releaseOutputStream() {
 				}
 			}
 			$nc(this->conn)->releaseOutputStream();
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$3) {
+			$assign(var$0, var$3);
 		} /*finally*/ {
 			$set(this, out, nullptr);
 		}
@@ -303,15 +287,14 @@ void StreamRemoteCall::releaseInputStream() {
 			if (this->in != nullptr) {
 				try {
 					$nc(this->in)->done();
-				} catch ($RuntimeException&) {
-					$catch();
+				} catch ($RuntimeException& e) {
 				}
 				$nc(this->in)->registerRefs();
 				$nc(this->in)->done(this->conn);
 			}
 			$nc(this->conn)->releaseInputStream();
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			$set(this, in, nullptr);
 		}
@@ -369,15 +352,13 @@ void StreamRemoteCall::executeCall() {
 				getInputStream();
 				returnType = $nc(this->in)->readByte();
 				$nc(this->in)->readID();
-			} catch ($UnmarshalException&) {
-				$var($UnmarshalException, e, $catch());
+			} catch ($UnmarshalException& e) {
 				$throw(e);
-			} catch ($IOException&) {
-				$var($IOException, e, $catch());
+			} catch ($IOException& e) {
 				$throwNew($UnmarshalException, "Error unmarshaling return header"_s, e);
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			if (ackHandler != nullptr) {
 				ackHandler->release();
@@ -398,8 +379,7 @@ void StreamRemoteCall::executeCall() {
 			{
 				try {
 					$assign(ex, $nc(this->in)->readObject());
-				} catch ($Exception&) {
-					$var($Exception, e, $catch());
+				} catch ($Exception& e) {
 					discardPendingRefs();
 					$throwNew($UnmarshalException, "Error unmarshaling return"_s, e);
 				}

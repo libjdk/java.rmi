@@ -3,18 +3,8 @@
 #include <java/io/IOException.h>
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectOutput.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/UnmarshalException.h>
@@ -116,21 +106,18 @@ void DGCImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum
 							$param_long_2 = in->readLong();
 							$assign($param_VMID_3, $cast($VMID, in->readObject()));
 							$param_boolean_4 = in->readBoolean();
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$0, $catch());
+					} catch ($Throwable& var$1) {
+						$assign(var$0, var$1);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
@@ -141,8 +128,7 @@ void DGCImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum
 				$nc(server)->clean($param_arrayOf_ObjID_1, $param_long_2, $param_VMID_3, $param_boolean_4);
 				try {
 					call->getResultStream(true);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;
@@ -155,41 +141,37 @@ void DGCImpl_Skel::dispatch($Remote* obj, $RemoteCall* remoteCall, int32_t opnum
 				int64_t $param_long_2 = 0;
 				$var($Lease, $param_Lease_3, nullptr);
 				{
-					$var($Throwable, var$1, nullptr);
+					$var($Throwable, var$2, nullptr);
 					try {
 						try {
 							$var($ObjectInput, in, $nc(call)->getInputStream());
 							$assign($param_arrayOf_ObjID_1, $cast($ObjIDArray, $nc(in)->readObject()));
 							$param_long_2 = in->readLong();
 							$assign($param_Lease_3, $cast($Lease, in->readObject()));
-						} catch ($ClassCastException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassCastException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($IOException&) {
-							$var($Exception, e, $catch());
+						} catch ($IOException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
-						} catch ($ClassNotFoundException&) {
-							$var($Exception, e, $catch());
+						} catch ($ClassNotFoundException& e) {
 							$nc(call)->discardPendingRefs();
 							$throwNew($UnmarshalException, "error unmarshalling arguments"_s, e);
 						}
-					} catch ($Throwable&) {
-						$assign(var$1, $catch());
+					} catch ($Throwable& var$3) {
+						$assign(var$2, var$3);
 					} /*finally*/ {
 						$nc(call)->releaseInputStream();
 					}
-					if (var$1 != nullptr) {
-						$throw(var$1);
+					if (var$2 != nullptr) {
+						$throw(var$2);
 					}
 				}
 				$var($Lease, $result, $nc(server)->dirty($param_arrayOf_ObjID_1, $param_long_2, $param_Lease_3));
 				try {
 					$var($ObjectOutput, out, call->getResultStream(true));
 					$nc(out)->writeObject($result);
-				} catch ($IOException&) {
-					$var($IOException, e, $catch());
+				} catch ($IOException& e) {
 					$throwNew($MarshalException, "error marshalling return"_s, e);
 				}
 				break;

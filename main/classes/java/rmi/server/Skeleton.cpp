@@ -1,12 +1,5 @@
 #include <java/rmi/server/Skeleton.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/server/Operation.h>
 #include <java/rmi/server/RemoteCall.h>
@@ -22,6 +15,7 @@ using $RemoteCall = ::java::rmi::server::RemoteCall;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _Skeleton_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -36,7 +30,6 @@ $CompoundAttribute _Skeleton_MethodAnnotations_getOperations1[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $MethodInfo _Skeleton_MethodInfo_[] = {
 	{"dispatch", "(Ljava/rmi/Remote;Ljava/rmi/server/RemoteCall;IJ)V", nullptr, $PUBLIC | $ABSTRACT | $DEPRECATED, nullptr, "java.lang.Exception", nullptr, _Skeleton_MethodAnnotations_dispatch0},

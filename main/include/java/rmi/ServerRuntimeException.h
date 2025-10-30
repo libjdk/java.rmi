@@ -21,8 +21,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x61E67E7811C08B53;
 	ServerRuntimeException(const ServerRuntimeException& e);
-	ServerRuntimeException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline ServerRuntimeException* operator ->() {
+		return (ServerRuntimeException*)throwing$;
+	}
 };
 
 	} // rmi

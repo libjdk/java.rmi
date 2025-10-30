@@ -1,14 +1,5 @@
 #include <java/rmi/server/SocketSecurityException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/server/ExportException.h>
 #include <jcpp.h>
 
@@ -22,11 +13,11 @@ using $ExportException = ::java::rmi::server::ExportException;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _SocketSecurityException_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $FieldInfo _SocketSecurityException_FieldInfo_[] = {
 	{"serialVersionUID", "J", nullptr, $PRIVATE | $STATIC | $FINAL, $constField(SocketSecurityException, serialVersionUID)},
@@ -67,16 +58,10 @@ void SocketSecurityException::init$($String* s, $Exception* ex) {
 SocketSecurityException::SocketSecurityException() {
 }
 
-SocketSecurityException::SocketSecurityException(const SocketSecurityException& e) {
+SocketSecurityException::SocketSecurityException(const SocketSecurityException& e) : $ExportException(e) {
 }
 
-SocketSecurityException SocketSecurityException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void SocketSecurityException::throwWrapper$() {
-	$pendingException(this);
+void SocketSecurityException::throw$() {
 	throw *this;
 }
 

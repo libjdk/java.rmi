@@ -7,27 +7,15 @@
 #include <java/io/ObjectInputFilter.h>
 #include <java/io/ObjectOutput.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Module.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/StackTraceElement.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/MarshalException.h>
 #include <java/rmi/RemoteException.h>
 #include <java/rmi/UnexpectedException.h>
@@ -191,9 +179,7 @@ void DGCImpl_Stub::finalize() {
 }
 
 $OperationArray* DGCImpl_Stub::operations = nullptr;
-
 int32_t DGCImpl_Stub::DGCCLIENT_MAX_DEPTH = 0;
-
 int32_t DGCImpl_Stub::DGCCLIENT_MAX_ARRAY_SIZE = 0;
 
 void DGCImpl_Stub::init$() {
@@ -215,20 +201,16 @@ void DGCImpl_Stub::clean($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_lon
 			out->writeLong($param_long_2);
 			out->writeObject($param_VMID_3);
 			out->writeBoolean($param_boolean_4);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
 		$nc(this->ref)->done(call);
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 }
@@ -243,8 +225,7 @@ $Lease* DGCImpl_Stub::dirty($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_
 			$nc(out)->writeObject($param_arrayOf_ObjID_1);
 			out->writeLong($param_long_2);
 			out->writeObject($param_Lease_3);
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			$throwNew($MarshalException, "error marshalling arguments"_s, e);
 		}
 		$nc(this->ref)->invoke(call);
@@ -256,30 +237,27 @@ $Lease* DGCImpl_Stub::dirty($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_
 				try {
 					$var($ObjectInput, in, call->getInputStream());
 					$assign($result, $cast($Lease, $nc(in)->readObject()));
-				} catch ($ClassCastException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassCastException& e) {
 					if ($instanceOf($TCPConnection, connection)) {
 						$nc($($nc(($cast($TCPConnection, connection)))->getChannel()))->free(connection, false);
 					}
 					call->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($IOException&) {
-					$var($Exception, e, $catch());
+				} catch ($IOException& e) {
 					if ($instanceOf($TCPConnection, connection)) {
 						$nc($($nc(($cast($TCPConnection, connection)))->getChannel()))->free(connection, false);
 					}
 					call->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
-				} catch ($ClassNotFoundException&) {
-					$var($Exception, e, $catch());
+				} catch ($ClassNotFoundException& e) {
 					if ($instanceOf($TCPConnection, connection)) {
 						$nc($($nc(($cast($TCPConnection, connection)))->getChannel()))->free(connection, false);
 					}
 					call->discardPendingRefs();
 					$throwNew($UnmarshalException, "error unmarshalling return"_s, e);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				$nc(this->ref)->done(call);
 			}
@@ -288,14 +266,11 @@ $Lease* DGCImpl_Stub::dirty($ObjIDArray* $param_arrayOf_ObjID_1, int64_t $param_
 			}
 		}
 		return $result;
-	} catch ($RuntimeException&) {
-		$var($RuntimeException, e, $catch());
+	} catch ($RuntimeException& e) {
 		$throw(e);
-	} catch ($RemoteException&) {
-		$var($RemoteException, e, $catch());
+	} catch ($RemoteException& e) {
 		$throw(e);
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		$throwNew($UnexpectedException, "undeclared checked exception"_s, e);
 	}
 	$shouldNotReachHere();
@@ -326,10 +301,8 @@ $ObjectInputFilter$Status* DGCImpl_Stub::leaseFilter($ObjectInputFilter$FilterIn
 		$load($Lease);
 		bool var$2 = clazz == $UID::class$ || clazz == $VMID::class$ || clazz == $Lease::class$;
 		if (!var$2) {
-			$load($Throwable);
 			bool var$3 = $Throwable::class$->isAssignableFrom(clazz);
 			if (var$3) {
-				$load($Object);
 				bool var$4 = $Object::class$->getModule() == $nc(clazz)->getModule();
 				if (!var$4) {
 					$load($RemoteException);
@@ -341,7 +314,6 @@ $ObjectInputFilter$Status* DGCImpl_Stub::leaseFilter($ObjectInputFilter$FilterIn
 		}
 		$load($StackTraceElement);
 		$load($ArrayList);
-		$load($Object);
 		bool var$1 = var$2 || clazz == $StackTraceElement::class$ || clazz == $ArrayList::class$ || clazz == $Object::class$;
 		$init($ObjectInputFilter$Status);
 		return (var$1 || $nc($($nc(clazz)->getName()))->equals("java.util.Collections$EmptyList"_s)) ? $ObjectInputFilter$Status::ALLOWED : $ObjectInputFilter$Status::REJECTED;

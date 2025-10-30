@@ -5,24 +5,10 @@
 #include <java/io/IOException.h>
 #include <java/io/OutputStream.h>
 #include <java/io/OutputStreamWriter.h>
-#include <java/io/PrintStream.h>
-#include <java/lang/Array.h>
 #include <java/lang/ArrayIndexOutOfBoundsException.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NumberFormatException.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
 #include <java/lang/StringBuffer.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/BasicPermission.h>
 #include <java/security/Permission.h>
 #include <java/util/AbstractMap.h>
@@ -63,6 +49,7 @@ using $LoggingPermission = ::java::util::logging::LoggingPermission;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _LogStream_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -118,7 +105,6 @@ $CompoundAttribute _LogStream_MethodAnnotations_write9[] = {
 	{}
 };
 
-
 $FieldInfo _LogStream_FieldInfo_[] = {
 	{"known", "Ljava/util/Map;", "Ljava/util/Map<Ljava/lang/String;Ljava/rmi/server/LogStream;>;", $PRIVATE | $STATIC, $staticField(LogStream, known)},
 	{"defaultStream", "Ljava/io/PrintStream;", nullptr, $PRIVATE | $STATIC, $staticField(LogStream, defaultStream)},
@@ -164,9 +150,7 @@ $Object* allocate$LogStream($Class* clazz) {
 	return $of($alloc(LogStream));
 }
 
-
 $Map* LogStream::known = nullptr;
-
 $PrintStream* LogStream::defaultStream = nullptr;
 
 void LogStream::init$($String* name, $OutputStream* out) {
@@ -245,12 +229,11 @@ void LogStream::write(int32_t b) {
 							$nc(this->bufOut)->writeTo(this->logOut);
 							$nc(this->logOut)->write(b);
 							$nc(this->logOut)->flush();
-						} catch ($IOException&) {
-							$var($IOException, e, $catch());
+						} catch ($IOException& e) {
 							setError();
 						}
-					} catch ($Throwable&) {
-						$assign(var$0, $catch());
+					} catch ($Throwable& var$1) {
+						$assign(var$0, var$1);
 					} /*finally*/ {
 						$nc(this->bufOut)->reset();
 					}
@@ -286,8 +269,7 @@ int32_t LogStream::parseLevel($String* s) {
 	}
 	try {
 		return $Integer::parseInt(s);
-	} catch ($NumberFormatException&) {
-		$catch();
+	} catch ($NumberFormatException& e) {
 	}
 	if ($nc(s)->length() < 1) {
 		return -1;
@@ -304,7 +286,6 @@ int32_t LogStream::parseLevel($String* s) {
 
 void clinit$LogStream($Class* class$) {
 	$assignStatic(LogStream::known, $new($HashMap, 5));
-	$init($System);
 	$assignStatic(LogStream::defaultStream, $System::err);
 }
 

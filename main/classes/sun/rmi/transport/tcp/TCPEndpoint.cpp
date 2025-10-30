@@ -6,27 +6,13 @@
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectOutput.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
 #include <java/lang/InternalError.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/OutOfMemoryError.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/Proxy.h>
 #include <java/net/ConnectException.h>
 #include <java/net/InetAddress.h>
@@ -318,11 +304,8 @@ $Object* allocate$TCPEndpoint($Class* clazz) {
 	return $of($alloc(TCPEndpoint));
 }
 
-
 $String* TCPEndpoint::localHost = nullptr;
-
 bool TCPEndpoint::localHostKnown = false;
-
 $Map* TCPEndpoint::localEndpoints = nullptr;
 
 int32_t TCPEndpoint::getInt($String* name, int32_t def) {
@@ -696,32 +679,25 @@ $Socket* TCPEndpoint::newSocket() {
 			$assign(clientFactory, chooseFactory());
 		}
 		$assign(socket, $nc(clientFactory)->createSocket(this->host, this->port));
-	} catch ($1UnknownHostException&) {
-		$var($1UnknownHostException, e, $catch());
+	} catch ($1UnknownHostException& e) {
 		$throwNew($UnknownHostException, $$str({"Unknown host: "_s, this->host}), e);
-	} catch ($ConnectException&) {
-		$var($ConnectException, e, $catch());
+	} catch ($ConnectException& e) {
 		$throwNew($1ConnectException, $$str({"Connection refused to host: "_s, this->host}), e);
-	} catch ($IOException&) {
-		$var($IOException, e, $catch());
+	} catch ($IOException& e) {
 		try {
 			TCPEndpoint::shedConnectionCaches();
-		} catch ($OutOfMemoryError&) {
-			$var($Throwable, mem, $catch());
-		} catch ($Exception&) {
-			$var($Throwable, mem, $catch());
+		} catch ($OutOfMemoryError& mem) {
+		} catch ($Exception& mem) {
 		}
 		$throwNew($ConnectIOException, $$str({"Exception creating connection to: "_s, this->host}), e);
 	}
 	try {
 		$nc(socket)->setTcpNoDelay(true);
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& e) {
 	}
 	try {
 		$nc(socket)->setKeepAlive(true);
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& e) {
 	}
 	return socket;
 }
@@ -776,8 +752,7 @@ void clinit$TCPEndpoint($Class* class$) {
 				} else {
 					$assignStatic(TCPEndpoint::localHost, localAddr->getHostAddress());
 				}
-			} catch ($Exception&) {
-				$var($Exception, e, $catch());
+			} catch ($Exception& e) {
 				TCPEndpoint::localHostKnown = false;
 				$assignStatic(TCPEndpoint::localHost, nullptr);
 			}

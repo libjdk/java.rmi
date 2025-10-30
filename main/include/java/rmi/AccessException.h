@@ -22,8 +22,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x57A31F0978C5D8C8;
 	AccessException(const AccessException& e);
-	AccessException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline AccessException* operator ->() {
+		return (AccessException*)throwing$;
+	}
 };
 
 	} // rmi

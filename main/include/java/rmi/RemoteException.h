@@ -26,8 +26,10 @@ public:
 	static const int64_t serialVersionUID = (int64_t)0xB88C9D4EDEE47A22;
 	$Throwable* detail = nullptr;
 	RemoteException(const RemoteException& e);
-	RemoteException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline RemoteException* operator ->() {
+		return (RemoteException*)throwing$;
+	}
 };
 
 	} // rmi

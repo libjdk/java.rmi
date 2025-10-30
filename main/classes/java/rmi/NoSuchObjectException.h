@@ -15,8 +15,10 @@ public:
 	void init$($String* s);
 	static const int64_t serialVersionUID = (int64_t)0x5BDCD18C01045019;
 	NoSuchObjectException(const NoSuchObjectException& e);
-	NoSuchObjectException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline NoSuchObjectException* operator ->() {
+		return (NoSuchObjectException*)throwing$;
+	}
 };
 
 	} // rmi

@@ -22,8 +22,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x8FC25414C01EC3B8;
 	ConnectIOException(const ConnectIOException& e);
-	ConnectIOException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline ConnectIOException* operator ->() {
+		return (ConnectIOException*)throwing$;
+	}
 };
 
 	} // rmi

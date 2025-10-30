@@ -8,13 +8,6 @@
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectInputStream.h>
 #include <java/io/OutputStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <java/rmi/server/UID.h>
 #include <java/util/AbstractList.h>
@@ -174,19 +167,16 @@ void ConnectionInputStream::done($Connection* c) {
 			$nc(conn)->releaseOutputStream();
 			$nc($(conn->getInputStream()))->available();
 			conn->releaseInputStream();
-		} catch ($RemoteException&) {
-			$var($RemoteException, e, $catch());
+		} catch ($RemoteException& e) {
 			reuse = false;
-		} catch ($IOException&) {
-			$var($IOException, e, $catch());
+		} catch ($IOException& e) {
 			reuse = false;
 		}
 		try {
 			if (conn != nullptr) {
 				$nc(ch)->free(conn, reuse);
 			}
-		} catch ($RemoteException&) {
-			$catch();
+		} catch ($RemoteException& e) {
 		}
 	}
 }

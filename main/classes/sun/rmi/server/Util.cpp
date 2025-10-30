@@ -6,37 +6,16 @@
 #include <java/io/IOException.h>
 #include <java/io/OutputStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Byte.h>
-#include <java/lang/Character.h>
-#include <java/lang/Class.h>
 #include <java/lang/ClassCastException.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/Double.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/Float.h>
 #include <java/lang/IllegalAccessException.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InstantiationException.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
 #include <java/lang/Math.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NoSuchMethodException.h>
 #include <java/lang/ReflectiveOperationException.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/SecurityException.h>
-#include <java/lang/Short.h>
-#include <java/lang/String.h>
-#include <java/lang/StringBuilder.h>
-#include <java/lang/System.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
@@ -262,15 +241,10 @@ $Object* allocate$Util($Class* clazz) {
 	return $of($alloc(Util));
 }
 
-
 int32_t Util::logLevel = 0;
-
 $Log* Util::serverRefLog = nullptr;
-
 bool Util::ignoreStubClasses = false;
-
 $Map* Util::withoutStubs = nullptr;
-
 $ClassArray* Util::stubConsParamTypes = nullptr;
 
 void Util::init$() {
@@ -283,8 +257,7 @@ $Remote* Util::createProxy($Class* implClass, $RemoteRef* clientRef, bool forceS
 	$Class* remoteClass = nullptr;
 	try {
 		remoteClass = getRemoteClass(implClass);
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, ex, $catch());
+	} catch ($ClassNotFoundException& ex) {
 		$throwNew($StubNotFoundException, $$str({"object does not implement a remote interface: "_s, $($nc(implClass)->getName())}));
 	}
 	if (forceStubUse || !(Util::ignoreStubClasses || !stubClassExists(remoteClass))) {
@@ -295,8 +268,7 @@ $Remote* Util::createProxy($Class* implClass, $RemoteRef* clientRef, bool forceS
 	$var($InvocationHandler, handler, $new($RemoteObjectInvocationHandler, clientRef));
 	try {
 		return $cast($Remote, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($Util$1, loader, interfaces, handler))));
-	} catch ($IllegalArgumentException&) {
-		$var($IllegalArgumentException, e, $catch());
+	} catch ($IllegalArgumentException& e) {
 		$throwNew($StubNotFoundException, "unable to create proxy"_s, e);
 	}
 	$shouldNotReachHere();
@@ -311,8 +283,7 @@ bool Util::stubClassExists($Class* remoteClass) {
 			$var($String, var$0, $str({$($nc(remoteClass)->getName()), "_Stub"_s}));
 			$Class::forName(var$0, false, $(remoteClass->getClassLoader()));
 			return true;
-		} catch ($ClassNotFoundException&) {
-			$var($ClassNotFoundException, cnfe, $catch());
+		} catch ($ClassNotFoundException& cnfe) {
 			$nc(Util::withoutStubs)->put(remoteClass, nullptr);
 		}
 	}
@@ -389,23 +360,17 @@ $RemoteStub* Util::createStub($Class* remoteClass, $RemoteRef* ref) {
 		$Class* stubcl = $Class::forName(stubname, false, $(remoteClass->getClassLoader()));
 		$var($Constructor, cons, $nc(stubcl)->getConstructor(Util::stubConsParamTypes));
 		return $cast($RemoteStub, $nc(cons)->newInstance($$new($ObjectArray, {$of(ref)})));
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, e, $catch());
+	} catch ($ClassNotFoundException& e) {
 		$throwNew($StubNotFoundException, $$str({"Stub class not found: "_s, stubname}), e);
-	} catch ($NoSuchMethodException&) {
-		$var($NoSuchMethodException, e, $catch());
+	} catch ($NoSuchMethodException& e) {
 		$throwNew($StubNotFoundException, $$str({"Stub class missing constructor: "_s, stubname}), e);
-	} catch ($InstantiationException&) {
-		$var($InstantiationException, e, $catch());
+	} catch ($InstantiationException& e) {
 		$throwNew($StubNotFoundException, $$str({"Can\'t create instance of stub class: "_s, stubname}), e);
-	} catch ($IllegalAccessException&) {
-		$var($IllegalAccessException, e, $catch());
+	} catch ($IllegalAccessException& e) {
 		$throwNew($StubNotFoundException, $$str({"Stub class constructor not public: "_s, stubname}), e);
-	} catch ($InvocationTargetException&) {
-		$var($InvocationTargetException, e, $catch());
+	} catch ($InvocationTargetException& e) {
 		$throwNew($StubNotFoundException, $$str({"Exception creating instance of stub class: "_s, stubname}), e);
-	} catch ($ClassCastException&) {
-		$var($ClassCastException, e, $catch());
+	} catch ($ClassCastException& e) {
 		$throwNew($StubNotFoundException, $$str({"Stub class not instance of RemoteStub: "_s, stubname}), e);
 	}
 	$shouldNotReachHere();
@@ -418,25 +383,20 @@ $Skeleton* Util::createSkeleton($Remote* object) {
 	$Class* cl = nullptr;
 	try {
 		cl = getRemoteClass($nc($of(object))->getClass());
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, ex, $catch());
+	} catch ($ClassNotFoundException& ex) {
 		$throwNew($SkeletonNotFoundException, $$str({"object does not implement a remote interface: "_s, $($nc($of(object))->getClass()->getName())}));
 	}
 	$var($String, skelname, $str({$($nc(cl)->getName()), "_Skel"_s}));
 	try {
 		$Class* skelcl = $Class::forName(skelname, false, $(cl->getClassLoader()));
 		return $cast($Skeleton, $nc(skelcl)->newInstance());
-	} catch ($ClassNotFoundException&) {
-		$var($ClassNotFoundException, ex, $catch());
+	} catch ($ClassNotFoundException& ex) {
 		$throwNew($SkeletonNotFoundException, $$str({"Skeleton class not found: "_s, skelname}), ex);
-	} catch ($InstantiationException&) {
-		$var($InstantiationException, ex, $catch());
+	} catch ($InstantiationException& ex) {
 		$throwNew($SkeletonNotFoundException, $$str({"Can\'t create skeleton: "_s, skelname}), ex);
-	} catch ($IllegalAccessException&) {
-		$var($IllegalAccessException, ex, $catch());
+	} catch ($IllegalAccessException& ex) {
 		$throwNew($SkeletonNotFoundException, $$str({"No public constructor: "_s, skelname}), ex);
-	} catch ($ClassCastException&) {
-		$var($ClassCastException, ex, $catch());
+	} catch ($ClassCastException& ex) {
 		$throwNew($SkeletonNotFoundException, $$str({"Skeleton not of correct class: "_s, skelname}), ex);
 	}
 	$shouldNotReachHere();
@@ -461,11 +421,9 @@ int64_t Util::computeMethodHash($Method* m) {
 		for (int32_t i = 0; i < $Math::min(8, $nc(hasharray)->length); ++i) {
 			hash += $sl((int64_t)((int32_t)($nc(hasharray)->get(i) & (uint32_t)255)), i * 8);
 		}
-	} catch ($IOException&) {
-		$var($IOException, ignore, $catch());
+	} catch ($IOException& ignore) {
 		hash = -1;
-	} catch ($NoSuchAlgorithmException&) {
-		$var($NoSuchAlgorithmException, complain, $catch());
+	} catch ($NoSuchAlgorithmException& complain) {
 		$throwNew($SecurityException, $(complain->getMessage()));
 	}
 	return hash;

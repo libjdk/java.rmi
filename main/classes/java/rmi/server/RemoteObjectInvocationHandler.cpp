@@ -2,24 +2,8 @@
 
 #include <java/io/IOException.h>
 #include <java/io/InvalidObjectException.h>
-#include <java/lang/Array.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/NoSuchMethodException.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/ReflectiveOperationException.h>
-#include <java/lang/RuntimeException.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
 #include <java/lang/reflect/InvocationHandler.h>
 #include <java/lang/reflect/Method.h>
 #include <java/lang/reflect/Proxy.h>
@@ -129,7 +113,6 @@ void RemoteObjectInvocationHandler::finalize() {
 	this->$RemoteObject::finalize();
 }
 
-
 $RemoteObjectInvocationHandler$MethodToHash_Maps* RemoteObjectInvocationHandler::methodToHash_Maps = nullptr;
 
 void RemoteObjectInvocationHandler::init$($RemoteRef* ref) {
@@ -197,15 +180,13 @@ $Object* RemoteObjectInvocationHandler::invokeRemoteMethod(Object$* proxy, $Meth
 			$throwNew($RemoteException, $$str({"Method is not Remote: "_s, decl, "::"_s, method}));
 		}
 		return $of($nc(this->ref)->invoke($cast($Remote, proxy), method, args, getMethodHash(method)));
-	} catch ($Exception&) {
-		$var($Exception, e, $catch());
+	} catch ($Exception& e) {
 		if (!($instanceOf($RuntimeException, e))) {
 			$Class* cl = $nc($of(proxy))->getClass();
 			try {
 				$var($String, var$0, $nc(method)->getName());
 				$assign(method, $nc(cl)->getMethod(var$0, $(method->getParameterTypes())));
-			} catch ($NoSuchMethodException&) {
-				$var($NoSuchMethodException, nsme, $catch());
+			} catch ($NoSuchMethodException& nsme) {
 				$throw($cast($IllegalArgumentException, $($$new($IllegalArgumentException)->initCause(nsme))));
 			}
 			$Class* thrownType = $of(e)->getClass();

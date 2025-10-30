@@ -5,25 +5,13 @@
 #include <java/io/ObjectInputFilter$Status.h>
 #include <java/io/ObjectInputFilter.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/EnclosingMethodInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/SocketPermission.h>
 #include <java/rmi/Remote.h>
 #include <java/rmi/RemoteException.h>
@@ -191,12 +179,11 @@ $Object* DGCImpl$2::run() {
 				$var($AccessControlContext, acceptAcc, $new($AccessControlContext, pd));
 				$var($Target, target, $cast($Target, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($DGCImpl$2$1, this, disp, stub, dgcID)), acceptAcc)));
 				$ObjectTable::putTarget(target);
-			} catch ($RemoteException&) {
-				$var($RemoteException, e, $catch());
+			} catch ($RemoteException& e) {
 				$throwNew($Error, "exception initializing server-side DGC"_s, e);
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			$($Thread::currentThread())->setContextClassLoader(savedCcl);
 		}

@@ -1,14 +1,6 @@
 #include <java/rmi/RMISecurityManager.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NamedAttribute.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ClassInfo = ::java::lang::ClassInfo;
@@ -25,11 +17,11 @@ $NamedAttribute RMISecurityManager_Attribute_var$0[] = {
 	{"forRemoval", 'Z', "true"},
 	{}
 };
+
 $CompoundAttribute _RMISecurityManager_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", RMISecurityManager_Attribute_var$0},
 	{}
 };
-
 
 $MethodInfo _RMISecurityManager_MethodInfo_[] = {
 	{"<init>", "()V", nullptr, $PUBLIC, $method(static_cast<void(RMISecurityManager::*)()>(&RMISecurityManager::init$))},

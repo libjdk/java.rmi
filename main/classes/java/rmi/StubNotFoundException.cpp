@@ -1,14 +1,5 @@
 #include <java/rmi/StubNotFoundException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -56,16 +47,10 @@ void StubNotFoundException::init$($String* s, $Exception* ex) {
 StubNotFoundException::StubNotFoundException() {
 }
 
-StubNotFoundException::StubNotFoundException(const StubNotFoundException& e) {
+StubNotFoundException::StubNotFoundException(const StubNotFoundException& e) : $RemoteException(e) {
 }
 
-StubNotFoundException StubNotFoundException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void StubNotFoundException::throwWrapper$() {
-	$pendingException(this);
+void StubNotFoundException::throw$() {
 	throw *this;
 }
 

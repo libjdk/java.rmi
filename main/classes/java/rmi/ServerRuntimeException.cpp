@@ -1,15 +1,5 @@
 #include <java/rmi/ServerRuntimeException.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/rmi/RemoteException.h>
 #include <jcpp.h>
 
@@ -22,6 +12,7 @@ using $RemoteException = ::java::rmi::RemoteException;
 
 namespace java {
 	namespace rmi {
+
 $CompoundAttribute _ServerRuntimeException_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -31,7 +22,6 @@ $CompoundAttribute _ServerRuntimeException_MethodAnnotations_init$0[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $FieldInfo _ServerRuntimeException_FieldInfo_[] = {
 	{"serialVersionUID", "J", nullptr, $PRIVATE | $STATIC | $FINAL, $constField(ServerRuntimeException, serialVersionUID)},
@@ -67,16 +57,10 @@ void ServerRuntimeException::init$($String* s, $Exception* ex) {
 ServerRuntimeException::ServerRuntimeException() {
 }
 
-ServerRuntimeException::ServerRuntimeException(const ServerRuntimeException& e) {
+ServerRuntimeException::ServerRuntimeException(const ServerRuntimeException& e) : $RemoteException(e) {
 }
 
-ServerRuntimeException ServerRuntimeException::wrapper$() {
-	$pendingException(this);
-	return *this;
-}
-
-void ServerRuntimeException::throwWrapper$() {
-	$pendingException(this);
+void ServerRuntimeException::throw$() {
 	throw *this;
 }
 

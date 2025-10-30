@@ -2,13 +2,6 @@
 
 #include <java/io/ObjectInput.h>
 #include <java/io/ObjectOutput.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 using $ObjectInput = ::java::io::ObjectInput;
@@ -20,6 +13,7 @@ using $MethodInfo = ::java::lang::MethodInfo;
 namespace java {
 	namespace rmi {
 		namespace server {
+
 $CompoundAttribute _RemoteCall_Annotations_[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
@@ -59,7 +53,6 @@ $CompoundAttribute _RemoteCall_MethodAnnotations_releaseOutputStream6[] = {
 	{"Ljava/lang/Deprecated;", nullptr},
 	{}
 };
-
 
 $MethodInfo _RemoteCall_MethodInfo_[] = {
 	{"done", "()V", nullptr, $PUBLIC | $ABSTRACT | $DEPRECATED, nullptr, "java.io.IOException", nullptr, _RemoteCall_MethodAnnotations_done0},

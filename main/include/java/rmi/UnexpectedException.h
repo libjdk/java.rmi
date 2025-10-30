@@ -22,8 +22,10 @@ public:
 	void init$($String* s, ::java::lang::Exception* ex);
 	static const int64_t serialVersionUID = (int64_t)0x18FC8BA33916AF47;
 	UnexpectedException(const UnexpectedException& e);
-	UnexpectedException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline UnexpectedException* operator ->() {
+		return (UnexpectedException*)throwing$;
+	}
 };
 
 	} // rmi

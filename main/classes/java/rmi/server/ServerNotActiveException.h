@@ -17,8 +17,10 @@ public:
 	void init$($String* s);
 	static const int64_t serialVersionUID = (int64_t)0x410EE93F71039B37;
 	ServerNotActiveException(const ServerNotActiveException& e);
-	ServerNotActiveException wrapper$();
-	virtual void throwWrapper$() override;
+	virtual void throw$() override;
+	inline ServerNotActiveException* operator ->() {
+		return (ServerNotActiveException*)throwing$;
+	}
 };
 
 		} // server
