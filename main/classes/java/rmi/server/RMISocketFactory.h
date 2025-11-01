@@ -23,7 +23,6 @@ class $export RMISocketFactory : public ::java::rmi::server::RMIClientSocketFact
 	$class(RMISocketFactory, 0, ::java::rmi::server::RMIClientSocketFactory, ::java::rmi::server::RMIServerSocketFactory)
 public:
 	RMISocketFactory();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual ::java::net::ServerSocket* createServerSocket(int32_t port) override {return nullptr;}
 	virtual ::java::net::Socket* createSocket($String* host, int32_t port) override {return nullptr;}

@@ -26,7 +26,6 @@ class $export SslRMIClientSocketFactory : public ::java::rmi::server::RMIClientS
 	$class(SslRMIClientSocketFactory, 0, ::java::rmi::server::RMIClientSocketFactory, ::java::io::Serializable)
 public:
 	SslRMIClientSocketFactory();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual void finalize() override;
 	void init$();

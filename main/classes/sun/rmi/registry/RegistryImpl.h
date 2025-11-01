@@ -68,7 +68,6 @@ class $export RegistryImpl : public ::java::rmi::server::RemoteServer, public ::
 	$class(RegistryImpl, 0, ::java::rmi::server::RemoteServer, ::java::rmi::registry::Registry)
 public:
 	RegistryImpl();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual bool equals(Object$* obj) override;
 	virtual void finalize() override;

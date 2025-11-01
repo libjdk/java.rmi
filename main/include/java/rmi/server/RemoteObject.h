@@ -29,7 +29,6 @@ class $import RemoteObject : public ::java::rmi::Remote, public ::java::io::Seri
 	$class(RemoteObject, $NO_CLASS_INIT, ::java::rmi::Remote, ::java::io::Serializable)
 public:
 	RemoteObject();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual void finalize() override;
 	void init$();

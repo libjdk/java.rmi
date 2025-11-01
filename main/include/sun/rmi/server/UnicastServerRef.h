@@ -73,7 +73,6 @@ class $import UnicastServerRef : public ::sun::rmi::server::UnicastRef, public :
 	$class(UnicastServerRef, 0, ::sun::rmi::server::UnicastRef, ::java::rmi::server::ServerRef, ::sun::rmi::server::Dispatcher)
 public:
 	UnicastServerRef();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual void done(::java::rmi::server::RemoteCall* call) override;
 	virtual bool equals(Object$* arg0) override;
